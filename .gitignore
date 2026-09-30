@@ -1,0 +1,22 @@
+# Credenciales y configuración local sensible
+.env
+.env.*
+*.env
+tradestation_tokens.env
+
+# Cachés de Python y pytest
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Archivos temporales generados por tests o herramientas
+*.tmp
+*.temp
+.coverage
+htmlcov/
+
