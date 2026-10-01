@@ -1,0 +1,1145 @@
+{
+  "ledger_version": "5C-4B.2",
+  "provider": "ThetaData",
+  "support_author": "Eduardo",
+  "received_at": "UNKNOWN",
+  "support_channel": "support ticket",
+  "support_reference": "UNKNOWN",
+  "raw_response": {
+    "path": "raw_response.md",
+    "encoding": "utf-8",
+    "sha256": "12d56f13a04f94deb6c74dc53fe16d8f888f4a3ecc2a2fdda81c74d49157728d",
+    "immutable_preservation": "BYTE_FOR_BYTE_FILE"
+  },
+  "review_status": "PENDING_HUMAN_REVIEW",
+  "human_review_required": true,
+  "automatic_approvals": 0,
+  "coverage": {
+    "registry": 41,
+    "answered": 23,
+    "partially_answered": 18,
+    "unanswered": 0,
+    "P0": {
+      "answered": 13,
+      "partial": 5,
+      "missing": 0
+    },
+    "P1": {
+      "answered": 8,
+      "partial": 12,
+      "missing": 0
+    },
+    "P2": {
+      "answered": 2,
+      "partial": 1,
+      "missing": 0
+    }
+  },
+  "classifications": {
+    "PROVIDER_WRITTEN_CONFIRMATION": 35,
+    "AMBIGUOUS": 6
+  },
+  "confidence": {
+    "MEDIUM": 23,
+    "LOW": 18
+  },
+  "contradictions": [],
+  "ambiguities": [
+    {
+      "term": "normally / around",
+      "questions": [
+        "OI-02"
+      ],
+      "critical_effect": "Not an availability bound and holiday handling absent."
+    },
+    {
+      "term": "average / averaging",
+      "questions": [
+        "TIM-02"
+      ],
+      "critical_effect": "A mean under 3 ms is not a maximum availability bound."
+    },
+    {
+      "term": "about",
+      "questions": [
+        "IDX-02",
+        "IDX-03",
+        "IDX-04"
+      ],
+      "critical_effect": "Approximate index cadence cannot establish coverage or cross-feed simultaneity."
+    },
+    {
+      "term": "around",
+      "questions": [
+        "GRK-04"
+      ],
+      "critical_effect": "SOFR publication timing is approximate and in any event next-business-day, hence non-causal intraday for its historical date."
+    },
+    {
+      "term": "can only be approximated",
+      "questions": [
+        "TRD-05",
+        "QTE-05"
+      ],
+      "critical_effect": "Provider explicitly requires an unguaranteed client-defined latency assumption."
+    }
+  ],
+  "source_fragments": {
+    "pit_tape": {
+      "question_ids": [
+        "PIT-01",
+        "PIT-02",
+        "PIT-03",
+        "PIT-04"
+      ],
+      "start_byte": 215,
+      "end_byte": 906,
+      "sha256": "8ed7e88d0bceee0108ea64143914fd1c5593890fff51882e03caf45d294a0c16"
+    },
+    "greek_storage": {
+      "question_ids": [
+        "PIT-05",
+        "PIT-06",
+        "GRK-02",
+        "GRK-05"
+      ],
+      "start_byte": 906,
+      "end_byte": 1655,
+      "sha256": "34e47fdd151356e8b486b091757a10fa9176ddce67a2b7c3faba116959b234aa"
+    },
+    "clocks": {
+      "question_ids": [
+        "TIM-01",
+        "TRD-01",
+        "QTE-01",
+        "IDX-01"
+      ],
+      "start_byte": 1655,
+      "end_byte": 2174,
+      "sha256": "7148f376f32244cb49c3bef1796f7f297f81678d3e623f8a5f68df381fedac46"
+    },
+    "latency": {
+      "question_ids": [
+        "TIM-02"
+      ],
+      "start_byte": 2174,
+      "end_byte": 2554,
+      "sha256": "09ee003d822d64bfbb2cbcf6e5cc483c2c83cad493b8050db87c01d07f527d5c"
+    },
+    "oi_meaning": {
+      "question_ids": [
+        "OI-01",
+        "OI-02"
+      ],
+      "start_byte": 2554,
+      "end_byte": 2879,
+      "sha256": "4487ce39cdc3fbb450fbb4e26ba074ae520cd9a9ea0d72d32175d8b8b5c96e38"
+    },
+    "oi_clock": {
+      "question_ids": [
+        "OI-03",
+        "OI-08"
+      ],
+      "start_byte": 2879,
+      "end_byte": 3184,
+      "sha256": "bbc584d23e0dddad1ddd40281a88c1e7cc7c82bcfa9d1b7c9605b3da2719feee"
+    },
+    "oi_sla": {
+      "question_ids": [
+        "OI-04"
+      ],
+      "start_byte": 3184,
+      "end_byte": 3299,
+      "sha256": "7e229796cd0c0892a734037d73fb9749fa2c30dbd49e21cef840c579680c10d1"
+    },
+    "oi_rows": {
+      "question_ids": [
+        "OI-05",
+        "OI-06",
+        "OI-07"
+      ],
+      "start_byte": 3299,
+      "end_byte": 3713,
+      "sha256": "0beb86653f99b63af2fef480393021c708af0f50d07c6a9751a6793eca592e3e"
+    },
+    "oi_asof": {
+      "question_ids": [
+        "OI-09"
+      ],
+      "start_byte": 3713,
+      "end_byte": 4135,
+      "sha256": "3e28663d581382b0e0a50df27c2f99d99ee469049c7f9a5ce424e13be8ef416e"
+    },
+    "trade_sequence": {
+      "question_ids": [
+        "TRD-02",
+        "TRD-04"
+      ],
+      "start_byte": 4135,
+      "end_byte": 4672,
+      "sha256": "5139ea9bda7077fcca453077163b5453b7f18e562c06d81f3f0972276a19c73a"
+    },
+    "trade_lifecycle": {
+      "question_ids": [
+        "TRD-03"
+      ],
+      "start_byte": 4672,
+      "end_byte": 5270,
+      "sha256": "045abef2fd5880735506c854db18bf35b03ec2b3f5223e641f20e9f07a6f00f4"
+    },
+    "stream_asof": {
+      "question_ids": [
+        "TRD-05",
+        "QTE-05"
+      ],
+      "start_byte": 5270,
+      "end_byte": 5556,
+      "sha256": "c073a342574013e10bf5a04f667d042a7b1759668b65709ce7153fd44916bb4a"
+    },
+    "quote_rows": {
+      "question_ids": [
+        "QTE-02",
+        "QTE-03",
+        "QTE-04"
+      ],
+      "start_byte": 5556,
+      "end_byte": 6224,
+      "sha256": "84ae4410f74d40cfd40c9c41233ab7437152e1ff5978ba52af78607e341b5a62"
+    },
+    "index": {
+      "question_ids": [
+        "IDX-02",
+        "IDX-03",
+        "IDX-04"
+      ],
+      "start_byte": 6224,
+      "end_byte": 6860,
+      "sha256": "929b4d016a7d28af63279faf332da8ce4af19cbfcc26b508b6419a033aa28bba"
+    },
+    "greek_tiers": {
+      "question_ids": [
+        "GRK-01"
+      ],
+      "start_byte": 6860,
+      "end_byte": 7215,
+      "sha256": "9d3c107a03a51c729c8c1c49f0a4bde06f404e80be1469942fc9538fdbbb88e4"
+    },
+    "greek_model": {
+      "question_ids": [
+        "GRK-03",
+        "GRK-04"
+      ],
+      "start_byte": 7215,
+      "end_byte": 8081,
+      "sha256": "8684e9dee1d609c24ad16dc87c564934269dac71c9148cf6cbe09e37d581f5ee"
+    },
+    "symbology": {
+      "question_ids": [
+        "SYM-01",
+        "SYM-02",
+        "SYM-03"
+      ],
+      "start_byte": 8081,
+      "end_byte": 8952,
+      "sha256": "37b3a4fe1c57823715f051e0ca465d661b3b71acf75ca28a5dee47c8f2d0a4eb"
+    },
+    "entitlements": {
+      "question_ids": [
+        "ENT-01",
+        "ENT-02"
+      ],
+      "start_byte": 8952,
+      "end_byte": 9586,
+      "sha256": "1118529993f1aa652d95a90e17eef6805adf053dd8e8b59e2e584d936270822d"
+    }
+  },
+  "question_reviews": [
+    {
+      "question_id": "ENT-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "entitlements",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Provider option/index tier capabilities are stated; the user account tier is not established.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "ENT-02",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "entitlements",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Provider depth/resolution limits by tier are stated; the user account entitlement is unknown.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "GRK-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "greek_tiers",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Provider capability tiers and index-option history start date are stated; account entitlement remains unknown.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "GRK-02",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "greek_storage",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Greeks/IV are recomputed on request and may change with methodology/parameters.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "GRK-03",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "greek_model",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Current model conventions are described, but effective version history/model identifier is incomplete.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "GRK-04",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "greek_model",
+      "evidence_class": "AMBIGUOUS",
+      "confidence": "LOW",
+      "support_statement": "Some inputs and timestamps are exposed, but rate publication is next-day, and model/compute/client-availability lineage is absent.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "GRK-05",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "greek_storage",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "A value downloaded today reflects today’s methodology; prior displayed output is not recoverable as stored output.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "IDX-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "clocks",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "SPX clock is an exchange-feed event timestamp; availability clocks are absent.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "IDX-02",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "index",
+      "evidence_class": "AMBIGUOUS",
+      "confidence": "LOW",
+      "support_statement": "Cboe index feed is about one print/second, unchanged values do not tick, and no coverage flags exist; tier depth is stated separately.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "IDX-03",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "index",
+      "evidence_class": "AMBIGUOUS",
+      "confidence": "LOW",
+      "support_statement": "The generic single-copy/no-version statement applies, but an SPX correction lifecycle is not documented.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "IDX-04",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "index",
+      "evidence_class": "AMBIGUOUS",
+      "confidence": "LOW",
+      "support_statement": "Index and OPRA are separate feeds with no common sequence; timestamp alignment is not causal simultaneity.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "oi_meaning",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "OI is the OPRA daily message value representing the preceding trading-day close.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-02",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "oi_meaning",
+      "evidence_class": "AMBIGUOUS",
+      "confidence": "LOW",
+      "support_statement": "D normally carries D-1 close and Monday carries Friday; holiday handling is not specified and normally/around are not bounds.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-03",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "oi_clock",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "The exposed OI timestamp is the OPRA message event timestamp, not client availability or revision time.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-04",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "oi_sla",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "ThetaData provides no universal pre-09:30 availability SLA.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-05",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "oi_rows",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "No OPRA message produces no row; absence is not zero and an explicit zero is OPRA-reported zero.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-06",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "oi_rows",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Multiple messages remain chronological rows without overwrite or correction flag; correction triggers/identity remain unresolved.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-07",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "oi_rows",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Earlier OI message rows are retained rather than overwritten when multiple messages exist.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-08",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "oi_clock",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "No OI availability/revision timestamp is exposed; the row clock is the OPRA event timestamp.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "OI-09",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "oi_asof",
+      "evidence_class": "AMBIGUOUS",
+      "confidence": "LOW",
+      "support_statement": "Latest event timestamp <= T reconstructs tape state, not provably what every client knew by T.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "PIT-01",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "pit_tape",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Stored trade tape retains OPRA cancel/correction records and originals, but client-session availability and stored-copy revision lineage are not preserved.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "PIT-02",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "pit_tape",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "A single stored quote copy is returned without prior versions or client availability; quote-specific correction history is not established.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "PIT-03",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "pit_tape",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "A single stored OI copy has no prior-version/revision clock, although multiple OPRA OI messages are retained as rows.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "PIT-04",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "pit_tape",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "A single stored index-day copy is described, but index correction lifecycle and client availability are not established.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "PIT-05",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "greek_storage",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Provider Greeks are computed at request time under current or selected legacy methodology; prior outputs are not stored.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "PIT-06",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "greek_storage",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Provider IV is computed at request time and prior outputs are not stored.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "QTE-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "clocks",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Quote timestamp is exchange event time; no receipt/processing/dissemination clock exists.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "QTE-02",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "quote_rows",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Quotes have no sequence; identity, duplicate, out-of-order and correction ordering remain unresolved.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "QTE-03",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "quote_rows",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Rows are OPRA NBBO updates with both sides, contract sizes, exchange and condition.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "QTE-04",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "quote_rows",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Option NBBO is said to be returned as OPRA sent, but locked/crossed handling is not specifically confirmed.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "QTE-05",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "stream_asof",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Stored quote tape is not a client-session recording; received-by-T needs an unguaranteed latency assumption.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "SYM-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "symbology",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "SPX/SPXW are distinct OPRA roots and identity uses symbol, expiration, strike and right; SPXPM cutoff is stated.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "SYM-02",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "symbology",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Metadata is not versioned and listing/delisting timestamps do not exist; correction effective times are unresolved.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "SYM-03",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "symbology",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Trade/quote activity on D plus SPXW expiration=D gives a restricted observed 0DTE universe, not complete PIT listing history.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "TIM-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "clocks",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Only exchange timestamps are exposed; provider receipt, processing, and client dissemination times are absent.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "TIM-02",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "latency",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Average OPRA receipt latency under 3 ms is explicitly not a maximum or causal availability bound.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "TRD-01",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "clocks",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Trade timestamp is exchange event time in America/New_York with millisecond precision; no receipt/processing/dissemination clock exists.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "TRD-02",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "trade_sequence",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Signed 32-bit exchange sequence wraps and is not globally unique; no global identity or total ordering contract exists.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "SEMANTICS_ANSWERED_BUT_REMAINS_HUMAN_REVIEWED",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "TRD-03",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "trade_lifecycle",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Condition codes identify late/cancel/correction records, but a cancel has no link to its original.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "TRD-04",
+      "response_coverage": "PARTIAL",
+      "source_fragment_id": "trade_sequence",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "LOW",
+      "support_statement": "Timestamp+sequence is not a global identity and same-millisecond collisions exist; duplicate/out-of-order guarantees are not supplied.",
+      "official_documentation": "UNVERIFIED_ENVIRONMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "question_id": "TRD-05",
+      "response_coverage": "ANSWERED",
+      "source_fragment_id": "stream_asof",
+      "evidence_class": "PROVIDER_WRITTEN_CONFIRMATION",
+      "confidence": "MEDIUM",
+      "support_statement": "Stored tape is not a client-session recording; received-by-T needs an unguaranteed latency assumption.",
+      "official_documentation": "NOT_LINKED_IN_FRAGMENT",
+      "documentation_agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN_UNTIL_ACCESSIBLE",
+      "contradiction": "NONE_DETECTED",
+      "acceptance_result": "DOES_NOT_AUTO_SATISFY",
+      "review_status": "PENDING_HUMAN_REVIEW"
+    }
+  ],
+  "documentation_checks": [
+    {
+      "url": "https://docs.thetadata.us/Articles/Data-And-Requests/Option-Greeks.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/Articles/Data-And-Requests/The-SIPs.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/operations/option_history_open_interest.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/Articles/Data-And-Requests/Making-Requests.html#trade-sequences",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/Articles/Errors-Exchanges-Conditions/Trade-Conditions.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/Articles/Data-And-Requests/OHLC-EOD.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/operations/option_history_quote.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/Articles/Data-And-Requests/Data-Issues.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/operations/index_history_price.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/operations/interest_rate_history_eod.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/Articles/Data-And-Requests/Symbology.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/operations/option_list_contracts.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    },
+    {
+      "url": "https://docs.thetadata.us/Articles/Getting-Started/Subscriptions.html",
+      "official_domain": true,
+      "public_get_attempted": "2026-10-01",
+      "result": "UNVERIFIED_ENVIRONMENT",
+      "transport_result": "403 Forbidden from environment tunnel",
+      "claims_supported": "NOT_ASSESSED",
+      "agreement": "NOT_VERIFIED",
+      "documentation_silence": "UNKNOWN",
+      "contradiction": "NONE_ESTABLISHED"
+    }
+  ],
+  "proposed_mapping_changes": [
+    {
+      "field": "open_interest",
+      "status": "BLOCKED_UNRESOLVED",
+      "questions": [
+        "PIT-03",
+        "OI-01",
+        "OI-02",
+        "OI-03",
+        "OI-04",
+        "OI-05",
+        "OI-06",
+        "OI-07",
+        "OI-08",
+        "OI-09",
+        "TIM-01",
+        "TIM-02"
+      ],
+      "confidence": "HIGH",
+      "available_time_rule": "No causal rule: OPRA event timestamp is not guaranteed client availability; do not use by T without a separately approved bound.",
+      "correction_rule": "Preserve every row chronologically; never coerce missing row to zero; explicit zero remains reported zero; correction identity is unknown.",
+      "residual_ambiguity": "No availability timestamp/SLA; holiday rule and correction identity/flag absent.",
+      "requires_human_review": true
+    },
+    {
+      "field": "trade_tape",
+      "status": "BLOCKED_UNRESOLVED",
+      "questions": [
+        "PIT-01",
+        "TRD-01",
+        "TRD-02",
+        "TRD-03",
+        "TRD-04",
+        "TRD-05",
+        "TIM-01",
+        "TIM-02"
+      ],
+      "confidence": "HIGH",
+      "available_time_rule": "Requires an explicit human-approved latency policy; event time alone is ineligible.",
+      "correction_rule": "Retain original and condition-coded lifecycle records; do not invent cancel linkage, global identity, deduplication, or total order.",
+      "residual_ambiguity": "No client clock/bound, dedup key, cancel linkage, or complete duplicate/out-of-order contract.",
+      "requires_human_review": true
+    },
+    {
+      "field": "quote_tape",
+      "status": "BLOCKED_UNRESOLVED",
+      "questions": [
+        "PIT-02",
+        "QTE-01",
+        "QTE-02",
+        "QTE-03",
+        "QTE-04",
+        "QTE-05",
+        "TIM-01",
+        "TIM-02"
+      ],
+      "confidence": "HIGH",
+      "available_time_rule": "Requires an explicit human-approved latency policy; event time alone is ineligible.",
+      "correction_rule": "Keep OPRA-sent rows and zero sides; no sequence/order/correction identity may be invented.",
+      "residual_ambiguity": "No client clock/bound, sequence, message identity, or specific locked/crossed lifecycle.",
+      "requires_human_review": true
+    },
+    {
+      "field": "spot",
+      "status": "BLOCKED_UNRESOLVED",
+      "questions": [
+        "PIT-04",
+        "IDX-01",
+        "IDX-02",
+        "IDX-03",
+        "IDX-04",
+        "TIM-01",
+        "TIM-02"
+      ],
+      "confidence": "HIGH",
+      "available_time_rule": "Requires explicit latency/skew policy; timestamp alignment across separate feeds is not simultaneity.",
+      "correction_rule": "Unknown SPX print correction lifecycle; do not treat single current copy as PIT guarantee.",
+      "residual_ambiguity": "About one print/second, no coverage flags, no common sequence, availability/revisions unresolved.",
+      "requires_human_review": true
+    },
+    {
+      "field": "provider_historical_greeks_iv",
+      "status": "EXCLUDED",
+      "questions": [
+        "PIT-05",
+        "PIT-06",
+        "GRK-02",
+        "GRK-03",
+        "GRK-04",
+        "GRK-05"
+      ],
+      "confidence": "HIGH",
+      "available_time_rule": "Computed at request/download time, not treated as historically available output.",
+      "correction_rule": "No prior output lineage; current/selected methodology may change historical result.",
+      "residual_ambiguity": "Effective model history and compute/model identifiers are incomplete.",
+      "requires_human_review": true
+    },
+    {
+      "field": "local_greeks_iv",
+      "status": "NEEDS_RECONSTRUCTION",
+      "questions": [
+        "PIT-05",
+        "PIT-06",
+        "GRK-02",
+        "GRK-03",
+        "GRK-04",
+        "GRK-05"
+      ],
+      "confidence": "MEDIUM",
+      "available_time_rule": "Use only causally eligible option/underlying inputs and a rate published before replay T; never use same-date retrospective SOFR intraday by default.",
+      "correction_rule": "Version and retain local inputs, model code, parameters and computation time; label outputs local, never provider PIT.",
+      "residual_ambiguity": "Underlying/quote availability is blocked; full effective model history and causal rate policy require human design.",
+      "requires_human_review": true
+    },
+    {
+      "field": "historical_0dte_contract_universe",
+      "status": "READY_WITH_CONSERVATIVE_RULE",
+      "questions": [
+        "SYM-01",
+        "SYM-02",
+        "SYM-03"
+      ],
+      "confidence": "LOW",
+      "available_time_rule": "Restricted proposal: only SPXW contracts evidenced by a trade/quote on D with expiration=D; excludes silent listed contracts.",
+      "correction_rule": "Do not infer versioned metadata or listing/delisting times; retain raw identity tuple and source activity.",
+      "residual_ambiguity": "Residual survivorship/inactivity bias, holidays, metadata corrections, and completeness of listings.",
+      "requires_human_review": true
+    },
+    {
+      "field": "provider_capability_matrix",
+      "status": "READY",
+      "questions": [
+        "GRK-01",
+        "ENT-01",
+        "ENT-02"
+      ],
+      "confidence": "MEDIUM",
+      "available_time_rule": "Capability documentation only; never implies this account is entitled.",
+      "correction_rule": "Record tier names/depth as received and re-review when provider offering changes.",
+      "residual_ambiguity": "Official linked pages could not be verified in this environment.",
+      "requires_human_review": true
+    },
+    {
+      "field": "account_entitlement",
+      "status": "BLOCKED_UNRESOLVED",
+      "questions": [
+        "ENT-01",
+        "ENT-02"
+      ],
+      "confidence": "HIGH",
+      "available_time_rule": "UNKNOWN until independently established without purchasing or changing plan.",
+      "correction_rule": "N/A",
+      "residual_ambiguity": "No account lookup or account evidence was provided.",
+      "requires_human_review": true
+    }
+  ],
+  "safety": {
+    "authenticated_thetadata_calls": 0,
+    "datasets_downloaded": 0,
+    "tradestation_calls": 0,
+    "orders": 0,
+    "oauth": 0,
+    "digitalocean": 0,
+    "mapping_modifications": 0,
+    "runtime_modifications": 0,
+    "automatic_approvals": 0,
+    "cutover": "NO"
+  }
+}
