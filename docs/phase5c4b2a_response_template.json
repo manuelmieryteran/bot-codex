@@ -1,0 +1,31 @@
+{
+  "template_version": "5C-4B.2A",
+  "notice": "Empty offline template; do not paste secrets or apply mappings.",
+  "responses": [
+    {
+      "question_id": "",
+      "provider": "ThetaData",
+      "category": "",
+      "received_at": "",
+      "support_channel": "",
+      "support_reference": "",
+      "raw_response_encoding": "utf-8",
+      "raw_response": "",
+      "verbatim_summary": "",
+      "interpretation": "",
+      "source_documents": [],
+      "source_fragments": [],
+      "evidence_class": "UNKNOWN",
+      "confidence": "UNASSESSED",
+      "affected_fields": [],
+      "mapping_before": "BLOCKED_UNRESOLVED",
+      "proposed_mapping_after": "BLOCKED_UNRESOLVED",
+      "temporal_rule": "",
+      "correction_rule": "UNKNOWN",
+      "remaining_ambiguity": "",
+      "semantic_dimensions": [],
+      "semantic_claims": [],
+      "review_status": "PENDING_HUMAN_REVIEW"
+    }
+  ]
+}
