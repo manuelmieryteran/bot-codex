@@ -1,0 +1,25 @@
+{
+  "notice": "SYNTHETIC ONLY. These are not ThetaData responses and contain no real provider data.",
+  "cases": [
+    "exact PIT confirmation",
+    "latest-revised confirmation",
+    "ambiguous PIT response",
+    "exact OI availability and PIT",
+    "approximate OI timing only",
+    "OI corrections unknown",
+    "trade timestamps documented but corrections unknown",
+    "quote receipt time and corrections documented",
+    "Greek methodology documented but historical recalculation unknown",
+    "local Greek reconstruction inputs fully documented",
+    "contradictory provider responses",
+    "missing P0 response",
+    "duplicate answer",
+    "unknown question_id",
+    "one paragraph answering multiple IDs"
+  ],
+  "shared_paragraph_example": {
+    "raw_response": "Synthetic paragraph scoped into two independent question records.",
+    "question_ids": ["TIM-01", "TIM-02"],
+    "fragment_ids": ["synthetic-fragment-1"]
+  }
+}
