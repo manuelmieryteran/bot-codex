@@ -15,6 +15,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from bot_spx.execution.shadow_bridge import (
+    execution_config_from_legacy,
+    execution_intent_from_legacy,
+    execution_state_from_legacy,
+)
+from bot_spx.execution.shadow_mode import run_dispatch_shadow
+from bot_spx.execution.shadow_submit import NullOrderSubmitPort
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PHASE4 = ROOT / "spx_data_FASE4_ESTABLE_FINAL_CANDIDATO.py"
@@ -44,16 +52,20 @@ class ExternalActivityError(AssertionError):
 
 @dataclass
 class ActivityLedger:
+    tradestation: int = 0
     transport: int = 0
     http: int = 0
     oauth: int = 0
     post: int = 0
     real_submit: int = 0
+    real_orders: int = 0
     digitalocean: int = 0
     token_reads: int = 0
     main: int = 0
     shadow: int = 0
     null_port: int = 0
+    candidate_submit_attempts: int = 0
+    legacy_fake_submits: int = 0
 
     def forbidden(self, capability: str):
         def fail(*_args: object, **_kwargs: object) -> None:
@@ -108,6 +120,19 @@ class Runtime:
         return self.namespace["dispatch_execution"]()
 
 
+class CountingNullOrderSubmitPort(NullOrderSubmitPort):
+    """A local-only candidate sink whose records are visible in the ledger."""
+
+    def __init__(self, ledger: ActivityLedger) -> None:
+        super().__init__()
+        self._ledger = ledger
+
+    def record(self, effect):
+        record = super().record(effect)
+        self._ledger.null_port += 1
+        return record
+
+
 def _definitions(path: Path, names: set[str]) -> list[ast.FunctionDef]:
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     found = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in names]
@@ -129,17 +154,28 @@ def load_runtime(path: Path, overrides: dict[str, Any] | None = None, *, submit_
         names.add("dispatch_execution")
     ledger = ActivityLedger()
     submit = LocalSubmit(submit_success)
+
+    def shadow_runner(*args: object, **kwargs: object):
+        ledger.shadow += 1
+        return run_dispatch_shadow(*args, **kwargs)
+
+    def null_port_factory() -> CountingNullOrderSubmitPort:
+        return CountingNullOrderSubmitPort(ledger)
     values: dict[str, Any] = {
         "__builtins__": {"abs": abs, "dict": dict, "float": float, "int": int,
                          "isinstance": isinstance, "len": len, "str": str,
+                         "globals": globals, "Exception": Exception,
                          "TypeError": TypeError, "ValueError": ValueError,
                          "OverflowError": OverflowError},
         "EXECUTION_MODE": "LIVE", "LIVE_ORDER_EXECUTION_ENABLED": True,
         "ORDER_EXECUTION_ENVIRONMENT": "SIM", "SHADOW_EXECUTION_ENABLED": False,
         "CURRENT_BROKER_ACCOUNT_ID": "SYNTHETIC-ACCOUNT", "MARKET_TZ": object(),
         "datetime": FixedClock, "submit_tradestation_order": submit,
-        "run_dispatch_shadow": ledger.forbidden("shadow"),
-        "NullOrderSubmitPort": ledger.forbidden("null_port"),
+        "run_dispatch_shadow": shadow_runner,
+        "NullOrderSubmitPort": null_port_factory,
+        "execution_state_from_legacy": execution_state_from_legacy,
+        "execution_intent_from_legacy": execution_intent_from_legacy,
+        "execution_config_from_legacy": execution_config_from_legacy,
         "tradestation_request": ledger.forbidden("transport"),
         "CURRENT_EXECUTION_STATUS": "READY", "CURRENT_EXECUTION_ACTION": "ENTRY",
         "CURRENT_EXECUTION_REASON": "SYNTHETIC INTENT", "CURRENT_EXECUTION_SIDE": "BUY",
@@ -149,6 +185,13 @@ def load_runtime(path: Path, overrides: dict[str, Any] | None = None, *, submit_
         "CURRENT_EXIT_EXECUTION_PERMISSION": "BLOCKED",
         "CURRENT_POSITION_STATE": "FLAT", "CURRENT_POSITION_CONTRACTS": 0,
         "CURRENT_POSITION_ENTRY_SIDE": "NONE", "CURRENT_POSITION_RECONCILIATION_OK": True,
+        "CURRENT_BROKER_POSITION_AVAILABLE": True,
+        "CURRENT_BROKER_POSITION_REASON": "SYNTHETIC BROKER POSITION",
+        "CURRENT_POSITION_RECONCILIATION_ACTION": "ALLOW",
+        "CURRENT_POSITION_RECONCILIATION_REASON": "SYNTHETIC MATCH",
+        "CURRENT_DISPATCH_STATUS": "SYNTHETIC",
+        "CURRENT_DISPATCH_REASON": "SYNTHETIC",
+        "CURRENT_DISPATCH_ID": "SYNTHETIC-DISPATCH-001",
         "CURRENT_BROKER_ORDER_STATE": "NONE", "CURRENT_BROKER_ORDER_ID": None,
         "CURRENT_BROKER_ORDER_STATUS": "NONE",
         "CURRENT_BROKER_ORDER_STATUS_DESCRIPTION": "NONE",
