@@ -7,16 +7,30 @@ minimal, read-only ThetaData API v3 queries. It is not a downloader, backtest,
 trading client, runtime integration, mapping decision, plan change, or cutover.
 Only don Manuel may run the authenticated command in the separate 4C-2B phase.
 
-The probe uses Python's standard library and ThetaData's documented HTTPS API v3
-API-key authentication (`Authorization: Bearer`), with fixed GET endpoints. No
-project or third-party package is required. Use Python 3.10 or later; check it with:
+The probe uses ThetaData's official `thetadata` Python library and its
+`ThetaClient`. The client discovers `THETADATA_API_KEY` from the environment and
+uses ThetaData's hosted authentication and gRPC data service; this tool does not
+construct a Bearer header, use an invented public REST base URL, or require Theta
+Terminal. Use Python 3.12 or later (the operator PC uses Python 3.13.5):
 
 ```powershell
 python --version
+python -m pip install "thetadata>=1.0.9"
 ```
 
-Do **not** install or change repository requirements. If Python is absent, install
-it from python.org, then reopen PowerShell.
+This is an isolated local-tool dependency. Do **not** add it to or change the
+repository's bot/runtime requirements. If Python is absent, install it from
+python.org, then reopen PowerShell.
+
+Official references used for this adapter:
+
+- package/release metadata: <https://pypi.org/project/thetadata/1.0.9/>;
+- official source repository linked by that package:
+  <https://github.com/AXIOMXLLC/python_library>.
+
+The adapter calls only the documented `ThetaClient` read methods named in the
+fixed P1–P9 plan. If a future library release removes one, the probe fails closed;
+it must not substitute an undocumented HTTP endpoint.
 
 ## Set, run, and remove the credential
 

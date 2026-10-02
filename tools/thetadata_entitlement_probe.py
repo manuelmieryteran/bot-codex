@@ -9,11 +9,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 import sys
-import urllib.error
-import urllib.parse
-import urllib.request
 import uuid
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -22,7 +20,6 @@ from typing import Any, Callable, Mapping, Sequence
 
 MAX_LOGICAL_PROBES = 9
 OUTPUT_NAME = "phase5c4b4c2_probe_result.json"
-BASE_URL = "https://api.thetadata.us/v3"
 OUTCOMES = frozenset({"VERIFIED_AVAILABLE", "VERIFIED_DENIED", "AMBIGUOUS", "NOT_TESTED", "ERROR"})
 MUTATION_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
 
@@ -32,21 +29,21 @@ class Probe:
     probe_id: str
     capability: str
     endpoint_family: str
-    path: str
+    operation: str
     expected_any: tuple[str, ...]
     dependent_on_contract: bool = False
 
 
 PROBES = (
-    Probe("P1", "ACCOUNT_METADATA", "account", "/account/subscription", ("subscription",)),
-    Probe("P2", "SPX_SPXW_CONTRACT_LIST", "option_contract", "/option/list/contracts", ("root", "expiration", "strike", "right")),
-    Probe("P3", "OPTION_QUOTE", "option_quote", "/option/history/quote", ("bid", "ask"), True),
-    Probe("P4", "OPTION_TRADE", "option_trade", "/option/history/trade", ("price", "size"), True),
-    Probe("P5", "OPEN_INTEREST", "option_open_interest", "/option/history/open_interest", ("open_interest",), True),
-    Probe("P6", "IV_FIRST_ORDER_GREEKS", "option_greeks_first_order", "/option/history/greeks/first_order", ("iv", "delta"), True),
-    Probe("P7", "EOD_GAMMA", "option_eod", "/option/history/eod", ("gamma",), True),
-    Probe("P8", "SPX_INDEX_HISTORY", "index_price", "/index/history/price", ("price",)),
-    Probe("P9", "INTEREST_RATE_HISTORY", "interest_rate", "/interest_rate/history/eod", ("rate",)),
+    Probe("P1", "ACCOUNT_METADATA", "account", "account_metadata", ("options_subscription", "index_subscription")),
+    Probe("P2", "SPX_SPXW_CONTRACT_LIST", "option_contract", "option_list_contracts", ("root", "expiration", "strike", "right")),
+    Probe("P3", "OPTION_QUOTE", "option_quote", "option_history_quote", ("bid", "ask"), True),
+    Probe("P4", "OPTION_TRADE", "option_trade", "option_history_trade", ("price", "size"), True),
+    Probe("P5", "OPEN_INTEREST", "option_open_interest", "option_history_open_interest", ("open_interest",), True),
+    Probe("P6", "IV_FIRST_ORDER_GREEKS", "option_greeks_first_order", "option_history_greeks_first_order", ("iv", "delta"), True),
+    Probe("P7", "EOD_GAMMA", "option_greeks_eod", "option_history_greeks_eod", ("gamma",), True),
+    Probe("P8", "SPX_INDEX_HISTORY", "index_price", "index_history_price", ("price",)),
+    Probe("P9", "INTEREST_RATE_HISTORY", "interest_rate", "interest_rate_history_eod", ("rate",)),
 )
 
 
@@ -94,16 +91,18 @@ def assert_safety(ledger: Mapping[str, Any]) -> None:
         raise RuntimeError("SAFETY_INVARIANT_FAILED")
 
 
-def _params(probe: Probe, day: date, contract: Mapping[str, Any] | None) -> dict[str, str]:
-    d = day.strftime("%Y%m%d")
+def _params(probe: Probe, day: date, contract: Mapping[str, Any] | None) -> dict[str, Any]:
     if probe.probe_id == "P1": return {}
-    if probe.probe_id == "P2": return {"root": "SPXW", "expiration": d}
-    if probe.probe_id == "P8": return {"root": "SPX", "start_date": d, "end_date": d, "interval": "1m"}
-    if probe.probe_id == "P9": return {"date": d}
+    if probe.probe_id == "P2": return {"request_type": "quote", "date": day, "symbol": "SPXW", "max_dte": 0}
+    if probe.probe_id == "P8": return {"symbol": "SPX", "date": day, "interval": "1s", "start_time": "09:30:00", "end_time": "09:30:01"}
+    if probe.probe_id == "P9": return {"symbol": "SOFR", "start_date": day, "end_date": day}
     assert contract is not None
-    result = {k: str(contract[k]) for k in ("root", "expiration", "strike", "right")}
-    if probe.probe_id in {"P3", "P4", "P6"}: result.update({"start_date": d, "end_date": d, "interval": "1m"})
-    else: result["date"] = d
+    result = {"symbol": str(contract["root"]), "expiration": date.fromisoformat(str(contract["expiration"])),
+              "strike": str(contract["strike"]), "right": str(contract["right"]).lower()}
+    if probe.probe_id in {"P3", "P6"}: result.update({"date": day, "interval": "1s", "start_time": "09:30:00", "end_time": "09:30:01"})
+    elif probe.probe_id == "P4": result.update({"date": day, "start_time": "09:30:00", "end_time": "09:30:01"})
+    elif probe.probe_id == "P5": result["date"] = day
+    else: result.update({"start_date": day, "end_date": day})
     return result
 
 
@@ -115,16 +114,25 @@ def select_contract(payload: Any, day: date) -> dict[str, Any] | None:
     for row in rows:
         if not isinstance(row, Mapping): continue
         normalized = {str(k).lower(): v for k, v in row.items()}
-        if str(normalized.get("root", "")).upper() != "SPXW": continue
+        root = normalized.get("root", normalized.get("symbol", ""))
+        if str(root).upper() != "SPXW": continue
         expiration = str(normalized.get("expiration", "")).replace("-", "")
         if expiration != wanted: continue
         if all(normalized.get(k) is not None for k in ("strike", "right")):
-            candidates.append({"root": "SPXW", "expiration": expiration, "strike": normalized["strike"], "right": str(normalized["right"]).upper()})
+            candidates.append({"root": "SPXW", "expiration": day.isoformat(), "strike": normalized["strike"], "right": str(normalized["right"]).upper()})
     if not candidates: return None
     return sorted(candidates, key=lambda c: (str(c["strike"]), str(c["right"])))[0]
 
 
 def extract_rows(payload: Any) -> list[Any]:
+    if hasattr(payload, "to_dicts"):
+        return list(payload.to_dicts())
+    if hasattr(payload, "to_dict"):
+        try:
+            records = payload.to_dict(orient="records")
+            if isinstance(records, list): return records
+        except TypeError:
+            pass
     if isinstance(payload, list): return payload
     if not isinstance(payload, Mapping): return []
     for key in ("data", "response", "contracts", "results"):
@@ -142,12 +150,25 @@ def _field_names(rows: Sequence[Any]) -> list[str]:
     return sorted(n for n in names if n.replace("_", "").isalnum())[:64]
 
 
+def _schema_has(fields: Sequence[str], expected: Sequence[str]) -> bool:
+    aliases = {
+        "root": {"root", "symbol"},
+        "bid": {"bid", "bid_price"},
+        "ask": {"ask", "ask_price"},
+        "price": {"price", "trade_price", "value"},
+        "iv": {"iv", "implied_vol", "implied_volatility"},
+    }
+    observed = set(fields)
+    return all(bool(observed.intersection(aliases.get(name, {name}))) for name in expected)
+
+
 def sanitize_error(exc: BaseException) -> str:
     """Return only an allow-listed class; exception text is never retained."""
     if isinstance(exc, TimeoutError): return "TIMEOUT"
-    if isinstance(exc, urllib.error.HTTPError):
-        if exc.code in (401, 403): return "AUTH_OR_ACCESS_ERROR"
-        return "HTTP_ERROR"
+    class_name = type(exc).__name__.lower()
+    if "authentication" in class_name or "unauthenticated" in class_name: return "AUTH_OR_ACCESS_ERROR"
+    if "permission" in class_name or "entitlement" in class_name: return "EXPLICIT_ENTITLEMENT_DENIAL"
+    if "nodata" in class_name: return "EMPTY_SUCCESS"
     if isinstance(exc, (ValueError, TypeError, json.JSONDecodeError)): return "MALFORMED_RESPONSE"
     return "TRANSPORT_ERROR"
 
@@ -161,43 +182,79 @@ def _result(probe: Probe, day: date, outcome: str, status: str, *, fields: Seque
             "entitlement_interpretation": outcome, "ambiguity": ambiguity, "notes": note}
 
 
-Transport = Callable[[str, Mapping[str, str], str], tuple[int, Any]]
+Transport = Callable[[str, Mapping[str, Any]], tuple[int, Any]]
 
 
-def official_rest_transport(path: str, params: Mapping[str, str], api_key: str) -> tuple[int, Any]:
-    """One GET via ThetaData's documented v3 HTTPS API-key mechanism."""
-    if path not in {p.path for p in PROBES}: raise RuntimeError("ENDPOINT_NOT_ALLOWLISTED")
-    url = BASE_URL + path
-    if params: url += "?" + urllib.parse.urlencode(params)
-    request = urllib.request.Request(url, headers={"Authorization": f"Bearer {api_key}", "Accept": "application/json"}, method="GET")
-    with urllib.request.urlopen(request, timeout=20) as response:
-        return response.status, json.loads(response.read())
+class OfficialThetaTransport:
+    """Narrow adapter over the official ``thetadata.ThetaClient``.
+
+    ThetaClient discovers THETADATA_API_KEY itself.  The key is never accepted by,
+    stored in, or forwarded through this adapter.
+    """
+
+    def __init__(self, client_factory: Callable[..., Any] | None = None) -> None:
+        if client_factory is None:
+            try:
+                from thetadata import ThetaClient
+            except ImportError as exc:
+                raise RuntimeError("OFFICIAL_CLIENT_UNAVAILABLE") from exc
+            client_factory = ThetaClient
+        # The upstream client logs authentication metadata at INFO level.  The
+        # probe never enables it and defensively suppresses library logging.
+        logging.getLogger("thetadata").setLevel(logging.CRITICAL)
+        self._client = client_factory(dataframe_type="polars")
+
+    def __call__(self, operation: str, params: Mapping[str, Any]) -> tuple[int, Any]:
+        allowed = {p.operation for p in PROBES}
+        if operation not in allowed:
+            raise RuntimeError("ENDPOINT_NOT_ALLOWLISTED")
+        if operation == "account_metadata":
+            return 200, {"options_subscription": getattr(self._client, "options_subscription", None),
+                         "index_subscription": getattr(self._client, "index_subscription", None)}
+        method = getattr(self._client, operation)
+        return 200, method(**params)
 
 
-def run(day: date, *, dry_run: bool, transport: Transport | None = None, environ: Mapping[str, str] | None = None, now: Callable[[], datetime] | None = None) -> dict[str, Any]:
+def run(day: date, *, dry_run: bool, transport: Transport | None = None,
+        transport_factory: Callable[[], Transport] = OfficialThetaTransport,
+        environ: Mapping[str, str] | None = None,
+        now: Callable[[], datetime] | None = None) -> dict[str, Any]:
     ledger = new_ledger()
     env = os.environ if environ is None else environ
     clock = now or (lambda: datetime.now(timezone.utc))
     results: list[dict[str, Any]] = []
     contract = None
-    api_key = ""
+    initialization_error: Exception | None = None
+    access_unavailable = False
     if not dry_run:
         ledger["credential_reads"] = 1
-        api_key = env.get("THETADATA_API_KEY", "")
-        if not api_key:
+        if not env.get("THETADATA_API_KEY"):
             raise RuntimeError("CREDENTIAL_UNAVAILABLE")
+        if transport is None:
+            try:
+                transport = transport_factory()
+            except Exception as exc:
+                initialization_error = exc
     for probe in PROBES:
         if dry_run:
             results.append(_result(probe, day, "NOT_TESTED", "DRY_RUN", ambiguity="NOT_EXECUTED", note="Plan validated without credential or network access."))
+            ledger["probes_not_tested"] += 1
+            continue
+        if access_unavailable:
+            results.append(_result(probe, day, "NOT_TESTED", "AUTHENTICATION_UNAVAILABLE", ambiguity="P1_AUTHENTICATION_UNAVAILABLE", note="Official client was not available; no request made."))
             ledger["probes_not_tested"] += 1
             continue
         if probe.dependent_on_contract and contract is None:
             results.append(_result(probe, day, "NOT_TESTED", "DEPENDENCY_UNAVAILABLE", ambiguity="P2_CONTRACT_UNAVAILABLE", note="No observed eligible contract; no request made."))
             ledger["probes_not_tested"] += 1
             continue
-        ledger["probes_attempted"] += 1; ledger["authenticated_calls"] += 1; ledger["provider_data_calls"] += 1
+        ledger["probes_attempted"] += 1; ledger["authenticated_calls"] += 1
+        if probe.probe_id != "P1": ledger["provider_data_calls"] += 1
         try:
-            status, payload = (transport or official_rest_transport)(probe.path, _params(probe, day, contract), api_key)
+            if initialization_error is not None:
+                raise initialization_error
+            assert transport is not None
+            status, payload = transport(probe.operation, _params(probe, day, contract))
             rows = extract_rows(payload); fields = _field_names(rows); count = len(rows)
             ledger["rows_observed"] += count
             if status in (401, 403):
@@ -209,14 +266,17 @@ def run(day: date, *, dry_run: bool, transport: Transport | None = None, environ
             elif not rows:
                 outcome, status_class, schema, ambiguity = "AMBIGUOUS", "EMPTY_SUCCESS", False, "EMPTY_IS_NOT_DENIAL"
             else:
-                schema = all(name in fields for name in probe.expected_any)
+                schema = _schema_has(fields, probe.expected_any)
                 outcome, status_class, ambiguity = ("VERIFIED_AVAILABLE", "SUCCESS", "NONE") if schema else ("AMBIGUOUS", "SUCCESS_SCHEMA_UNVERIFIED", "MALFORMED_OR_PARTIAL_SCHEMA")
             result = _result(probe, day, outcome, status_class, fields=fields, rows=count, schema=schema, ambiguity=ambiguity)
             if probe.probe_id == "P2" and outcome == "VERIFIED_AVAILABLE": contract = select_contract(payload, day)
-        except BaseException as exc:
+        except Exception as exc:
             cls = sanitize_error(exc)
-            outcome = "AMBIGUOUS" if cls in {"TIMEOUT", "AUTH_OR_ACCESS_ERROR"} else "ERROR"
+            if cls == "EXPLICIT_ENTITLEMENT_DENIAL": outcome = "VERIFIED_DENIED"
+            elif cls in {"TIMEOUT", "AUTH_OR_ACCESS_ERROR", "EMPTY_SUCCESS"}: outcome = "AMBIGUOUS"
+            else: outcome = "ERROR"
             result = _result(probe, day, outcome, cls, ambiguity="NO_ENTITLEMENT_INFERENCE", note="Sanitized failure; no exception details retained.")
+            if probe.probe_id == "P1": access_unavailable = True
         results.append(result)
         ledger[{"VERIFIED_AVAILABLE":"probes_available", "VERIFIED_DENIED":"probes_denied", "AMBIGUOUS":"probes_ambiguous", "NOT_TESTED":"probes_not_tested", "ERROR":"probes_error"}[result["outcome"]]] += 1
     assert_safety(ledger)
