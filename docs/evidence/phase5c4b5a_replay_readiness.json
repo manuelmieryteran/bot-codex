@@ -1,0 +1,1016 @@
+{
+  "account_acquisition_snapshot": {
+    "account_tier": "NOT_PERSISTED/UNRESOLVED",
+    "historical_depth": "2026-01-15/SINGLE_DATE_ONLY",
+    "option_trades": "AMBIGUOUS/EMPTY_SUCCESS",
+    "p2": "ACQUISITION_SCOPE_ANOMALY",
+    "p2_row_count": 17326,
+    "spx_index_history": "ERROR/TRANSPORT_ERROR/UNRESOLVED",
+    "verified_available": [
+      "ACCOUNT_METADATA_ACCESS",
+      "SPX_SPXW_CONTRACT_LIST_ACCESS",
+      "OPTION_QUOTE_ACQUISITION",
+      "OPEN_INTEREST_ACQUISITION",
+      "PROVIDER_IV_FIRST_ORDER_GREEKS_ACQUISITION",
+      "EOD_GAMMA_ACQUISITION",
+      "INTEREST_RATE_HISTORY_ACQUISITION"
+    ]
+  },
+  "components": [
+    {
+      "component": "historical_spxw_0dte_universe",
+      "evidence": "root=SPXW, expiration=D and observed trade/quote activity on D; confidence LOW",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "listed but inactive contracts",
+        "incomplete metadata",
+        "unversioned listing/delisting",
+        "holidays and special expirations",
+        "historical calendar/listing changes",
+        "survivorship/inactivity"
+      ],
+      "state": "RESOLVED_WITH_CONSERVATIVE_RULE"
+    },
+    {
+      "component": "option_quotes",
+      "evidence": "P3 acquisition VERIFIED_AVAILABLE for one contract/date; causal mapping remains BLOCKED_UNRESOLVED",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "exchange event time is not client available time",
+        "no sequence",
+        "corrections unresolved",
+        "zero bid/ask semantics unresolved",
+        "no proven latency bound",
+        "staleness and cross-feed skew unapproved"
+      ],
+      "state": "BLOCKED_AVAILABILITY"
+    },
+    {
+      "component": "option_trades",
+      "evidence": "P4 AMBIGUOUS/EMPTY_SUCCESS",
+      "layer": "L2_ACCOUNT_ACQUISITION",
+      "residual_risks": [
+        "acquisition cause unresolved",
+        "signed 32-bit sequence wraps and is not globally unique",
+        "late/cancel/correction records are not linked",
+        "historical tape is not received-by-T"
+      ],
+      "state": "BLOCKED_ENTITLEMENT_AMBIGUITY"
+    },
+    {
+      "component": "open_interest",
+      "evidence": "P5 acquisition VERIFIED_AVAILABLE; previous-trading-day OPRA daily OI",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "message time is not client availability",
+        "no pre-open SLA",
+        "multiple messages and no correction flag",
+        "NO_MESSAGE differs from reported ZERO"
+      ],
+      "state": "BLOCKED_AVAILABILITY"
+    },
+    {
+      "component": "spx_historical_spot",
+      "evidence": "P8 ERROR/TRANSPORT_ERROR/UNRESOLVED",
+      "layer": "L2_ACCOUNT_ACQUISITION",
+      "residual_risks": [
+        "depth unverified",
+        "available_time unknown",
+        "separate Cboe/OPRA feeds have no shared sequence",
+        "gap and staleness policy absent",
+        "no fallback approved"
+      ],
+      "state": "BLOCKED_ACQUISITION"
+    },
+    {
+      "component": "interest_rate",
+      "evidence": "P9 acquisition VERIFIED_AVAILABLE; publication_time represented",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "same-date SOFR is published D+1",
+        "no causal rate-selection policy approved"
+      ],
+      "state": "BLOCKED_HUMAN_DECISION"
+    },
+    {
+      "component": "dividend_policy",
+      "evidence": "local Black-Scholes requires explicit dividend yield",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "ZERO is mathematical/test-only",
+        "historical dividend policy and version are absent"
+      ],
+      "state": "BLOCKED_HUMAN_DECISION"
+    },
+    {
+      "component": "contract_metadata",
+      "evidence": "P2 supplies expiration/right/strike/symbol only",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "expiration time and settlement style unresolved",
+        "reference/available time and provenance incomplete",
+        "holiday/special listing must fail closed"
+      ],
+      "state": "BLOCKED_METADATA"
+    },
+    {
+      "component": "local_iv_reconstruction",
+      "evidence": "LOCAL_SPX_IV_BISECTION_V1 is mathematically tested only",
+      "layer": "L4_REPLAY_READINESS",
+      "residual_risks": [
+        "causal prerequisites are blocked",
+        "real-input validation absent"
+      ],
+      "state": "BLOCKED_RECONSTRUCTION"
+    },
+    {
+      "component": "local_greeks_reconstruction",
+      "evidence": "LOCAL_SPX_BS_V1 is mathematically tested only",
+      "layer": "L4_REPLAY_READINESS",
+      "residual_risks": [
+        "provider historical Greeks/IV remain EXCLUDED",
+        "causal prerequisites are blocked"
+      ],
+      "state": "BLOCKED_RECONSTRUCTION"
+    },
+    {
+      "component": "cross_feed_temporal_alignment",
+      "evidence": "LAST_CAUSALLY_AVAILABLE is represented; EXACT_SYNTHETIC is test-only",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "event/available-time skew limit unapproved",
+        "NEAREST_FUTURE, FUTURE_INTERPOLATION and FUTURE_BACKFILL prohibited"
+      ],
+      "state": "BLOCKED_ALIGNMENT"
+    },
+    {
+      "component": "corrections_cancels_policy",
+      "evidence": "source-specific correction semantics remain unresolved",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "quotes: no point-in-time behavior",
+        "trades: codes exist but corrections are unlinked",
+        "OI: multiple messages/no flag",
+        "SPX: correction behavior unknown"
+      ],
+      "state": "BLOCKED_CORRECTION_POLICY"
+    },
+    {
+      "component": "missingness_policy",
+      "evidence": "MISSING, ZERO, NO_MESSAGE and UNKNOWN remain distinct",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "silent forward-fill prohibited",
+        "zero imputation requires a future explicit rule"
+      ],
+      "state": "BLOCKED_HUMAN_DECISION"
+    },
+    {
+      "component": "staleness_policy",
+      "evidence": "no approved max quote age, max SPX age, or cross-feed skew",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "thresholds require empirical coverage/latency evidence and human approval"
+      ],
+      "state": "BLOCKED_STALENESS_POLICY"
+    },
+    {
+      "component": "session_calendar_expiration",
+      "evidence": "America/New_York and expiration date=D are necessary but insufficient",
+      "layer": "L3_CAUSAL_INPUT_ELIGIBILITY",
+      "residual_risks": [
+        "DST, holidays, early closes, AM/PM settlement and historical listing changes unresolved"
+      ],
+      "state": "BLOCKED_METADATA"
+    },
+    {
+      "component": "historical_depth",
+      "evidence": "account evidence covers only 2026-01-15 (SINGLE_DATE_ONLY)",
+      "layer": "L2_ACCOUNT_ACQUISITION",
+      "residual_risks": [
+        "provider-described history is not account-verified depth",
+        "required backtest period is HUMAN_DECISION_PENDING"
+      ],
+      "state": "BLOCKED_HISTORICAL_DEPTH"
+    },
+    {
+      "component": "deterministic_provenance",
+      "evidence": "future records need provider/dataset/identity/times/context and policy/mapping/model/transformation versions",
+      "layer": "L4_REPLAY_READINESS",
+      "residual_risks": [
+        "bundle schema and validation are not implemented"
+      ],
+      "state": "BLOCKED_VALIDATION"
+    },
+    {
+      "component": "replay_bundle_eligibility",
+      "evidence": "all requested required inputs must independently pass causal gates",
+      "layer": "L4_REPLAY_READINESS",
+      "residual_risks": [
+        "partial L3 cannot promote L4"
+      ],
+      "state": "BLOCKED_VALIDATION"
+    },
+    {
+      "component": "loader_readiness",
+      "evidence": "loader is outside Phase 5A and was not implemented",
+      "layer": "L4_REPLAY_READINESS",
+      "residual_risks": [
+        "future work remains blocked by the contract gates"
+      ],
+      "state": "NOT_REQUIRED"
+    },
+    {
+      "component": "backtest_readiness",
+      "evidence": "backtest is outside Phase 5A and was not executed",
+      "layer": "L4_REPLAY_READINESS",
+      "residual_risks": [
+        "requires a causally eligible loader/session bundle first"
+      ],
+      "state": "NOT_REQUIRED"
+    }
+  ],
+  "correction_matrix": [
+    {
+      "causal_reconstruction_possible": "NO",
+      "condition_codes": "bid/ask conditions observed but correction meaning unproven",
+      "correction_information_available": "UNRESOLVED",
+      "linked_correction": "UNRESOLVED",
+      "overwrite_behavior": "UNRESOLVED",
+      "source": "quotes",
+      "unresolved_risk": "retrospective record may differ from the quote known at replay_time"
+    },
+    {
+      "causal_reconstruction_possible": "NO",
+      "condition_codes": "YES",
+      "correction_information_available": "late/cancel/correction codes documented",
+      "linked_correction": "NO",
+      "overwrite_behavior": "UNRESOLVED",
+      "source": "trades",
+      "unresolved_risk": "cancel cannot be deterministically joined to original and sequence wraps"
+    },
+    {
+      "causal_reconstruction_possible": "NO",
+      "condition_codes": "NO",
+      "correction_information_available": "multiple messages possible; no correction flag",
+      "linked_correction": "NO",
+      "overwrite_behavior": "UNRESOLVED",
+      "source": "open_interest",
+      "unresolved_risk": "latest row may encode a correction unavailable at replay_time"
+    },
+    {
+      "causal_reconstruction_possible": "NO",
+      "condition_codes": "UNRESOLVED",
+      "correction_information_available": "UNRESOLVED",
+      "linked_correction": "UNRESOLVED",
+      "overwrite_behavior": "UNRESOLVED",
+      "source": "spx",
+      "unresolved_risk": "historical correction and point-in-time revision behavior unknown"
+    }
+  ],
+  "cutover": "NO",
+  "dependencies": [
+    {
+      "dependent": "quotes.corrections",
+      "prerequisite": "quotes.available_time"
+    },
+    {
+      "dependent": "causal_option_mid",
+      "prerequisite": "quotes.corrections"
+    },
+    {
+      "dependent": "spx.causal_series",
+      "prerequisite": "spx.acquisition"
+    },
+    {
+      "dependent": "causal_underlying",
+      "prerequisite": "spx.causal_series"
+    },
+    {
+      "dependent": "static_oi_gex",
+      "prerequisite": "oi.causal_row"
+    },
+    {
+      "dependent": "causal_rate",
+      "prerequisite": "rate.policy"
+    },
+    {
+      "dependent": "causal_dividend",
+      "prerequisite": "dividend.policy"
+    },
+    {
+      "dependent": "causal_contract_metadata",
+      "prerequisite": "metadata.contract"
+    },
+    {
+      "dependent": "local.iv_greeks",
+      "prerequisite": "alignment.policy"
+    },
+    {
+      "dependent": "local.iv_greeks",
+      "prerequisite": "staleness.policy"
+    },
+    {
+      "dependent": "local.iv_greeks",
+      "prerequisite": "causal_option_mid"
+    },
+    {
+      "dependent": "local.iv_greeks",
+      "prerequisite": "causal_underlying"
+    },
+    {
+      "dependent": "local.iv_greeks",
+      "prerequisite": "causal_rate"
+    },
+    {
+      "dependent": "local.iv_greeks",
+      "prerequisite": "causal_dividend"
+    },
+    {
+      "dependent": "local.iv_greeks",
+      "prerequisite": "causal_contract_metadata"
+    },
+    {
+      "dependent": "static_oi_gex",
+      "prerequisite": "local.iv_greeks"
+    },
+    {
+      "dependent": "trades.tape_semantics",
+      "prerequisite": "trades.acquisition"
+    },
+    {
+      "dependent": "dealer_flow",
+      "prerequisite": "trades.tape_semantics"
+    },
+    {
+      "dependent": "aggressor_classification",
+      "prerequisite": "trades.tape_semantics"
+    },
+    {
+      "dependent": "dynamic_gex",
+      "prerequisite": "dealer_flow"
+    },
+    {
+      "dependent": "dynamic_gex",
+      "prerequisite": "local.iv_greeks"
+    },
+    {
+      "dependent": "signal_replay",
+      "prerequisite": "static_oi_gex"
+    },
+    {
+      "dependent": "signal_replay",
+      "prerequisite": "dynamic_gex"
+    },
+    {
+      "dependent": "session.bundle",
+      "prerequisite": "historical.depth"
+    },
+    {
+      "dependent": "session.bundle",
+      "prerequisite": "signal_replay"
+    },
+    {
+      "dependent": "session.bundle",
+      "prerequisite": "local.iv_greeks"
+    }
+  ],
+  "depth_matrix": [
+    {
+      "account_verified_depth": "2026-01-15/SINGLE_DATE_ONLY",
+      "component": "SPXW contracts",
+      "provider_described_depth": "provider-described history; not account proof",
+      "required_backtest_depth": "HUMAN_DECISION_PENDING",
+      "state": "BLOCKED_HISTORICAL_DEPTH"
+    },
+    {
+      "account_verified_depth": "2026-01-15/SINGLE_DATE_ONLY",
+      "component": "option quotes",
+      "provider_described_depth": "provider-described history; not account proof",
+      "required_backtest_depth": "HUMAN_DECISION_PENDING",
+      "state": "BLOCKED_HISTORICAL_DEPTH"
+    },
+    {
+      "account_verified_depth": "2026-01-15/SINGLE_DATE_ONLY",
+      "component": "option trades",
+      "provider_described_depth": "provider-described history; account entitlement ambiguous",
+      "required_backtest_depth": "HUMAN_DECISION_PENDING",
+      "state": "BLOCKED_HISTORICAL_DEPTH"
+    },
+    {
+      "account_verified_depth": "2026-01-15/SINGLE_DATE_ONLY",
+      "component": "open interest",
+      "provider_described_depth": "provider-described daily history; not account proof",
+      "required_backtest_depth": "HUMAN_DECISION_PENDING",
+      "state": "BLOCKED_HISTORICAL_DEPTH"
+    },
+    {
+      "account_verified_depth": "2026-01-15/SINGLE_DATE_ONLY",
+      "component": "SPX index",
+      "provider_described_depth": "provider-described index history; acquisition errored",
+      "required_backtest_depth": "HUMAN_DECISION_PENDING",
+      "state": "BLOCKED_HISTORICAL_DEPTH"
+    },
+    {
+      "account_verified_depth": "2026-01-15/SINGLE_DATE_ONLY",
+      "component": "interest rates",
+      "provider_described_depth": "provider-described history; not account proof",
+      "required_backtest_depth": "HUMAN_DECISION_PENDING",
+      "state": "BLOCKED_HISTORICAL_DEPTH"
+    }
+  ],
+  "evidence_date": "2026-01-15",
+  "feature_requirements": [
+    {
+      "current_readiness": "BLOCKED_ACQUISITION",
+      "derived_inputs": [],
+      "feature": "SPX spot",
+      "local_greeks": "NOT_REQUIRED",
+      "oi": "NOT_REQUIRED",
+      "quotes": "NOT_REQUIRED",
+      "raw_inputs": [
+        "spx_index"
+      ],
+      "spx": "REQUIRED",
+      "trades": "NOT_REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_AVAILABILITY",
+      "derived_inputs": [],
+      "feature": "Call Wall",
+      "local_greeks": "NOT_REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "NOT_REQUIRED",
+      "raw_inputs": [
+        "option_contracts",
+        "open_interest"
+      ],
+      "spx": "NOT_REQUIRED",
+      "trades": "NOT_REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_AVAILABILITY",
+      "derived_inputs": [],
+      "feature": "Put Wall",
+      "local_greeks": "NOT_REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "NOT_REQUIRED",
+      "raw_inputs": [
+        "option_contracts",
+        "open_interest"
+      ],
+      "spx": "NOT_REQUIRED",
+      "trades": "NOT_REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "local_iv",
+        "local_gamma"
+      ],
+      "feature": "Gamma Flip / Zero Gamma",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "open_interest",
+        "option_quotes",
+        "spx_index",
+        "rate",
+        "dividend",
+        "contract_metadata"
+      ],
+      "spx": "REQUIRED",
+      "trades": "NOT_REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "local_gamma"
+      ],
+      "feature": "Static OI/GEX",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "open_interest",
+        "option_quotes",
+        "spx_index",
+        "rate",
+        "dividend",
+        "contract_metadata"
+      ],
+      "spx": "REQUIRED",
+      "trades": "NOT_REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "aggressor_classification",
+        "local_gamma"
+      ],
+      "feature": "Dynamic GEX",
+      "local_greeks": "REQUIRED",
+      "oi": "OPTIONAL",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "option_trades",
+        "option_quotes",
+        "spx_index",
+        "rate",
+        "dividend",
+        "contract_metadata"
+      ],
+      "spx": "REQUIRED",
+      "trades": "REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_ENTITLEMENT_AMBIGUITY",
+      "derived_inputs": [
+        "aggressor_classification"
+      ],
+      "feature": "Dealer flow",
+      "local_greeks": "NOT_REQUIRED",
+      "oi": "NOT_REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "option_trades",
+        "option_quotes"
+      ],
+      "spx": "NOT_REQUIRED",
+      "trades": "REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "dealer_flow",
+        "local_gamma"
+      ],
+      "feature": "Dealer Dynamic GEX",
+      "local_greeks": "REQUIRED",
+      "oi": "NOT_REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "option_trades",
+        "option_quotes",
+        "spx_index",
+        "rate",
+        "dividend",
+        "contract_metadata"
+      ],
+      "spx": "REQUIRED",
+      "trades": "REQUIRED"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "static_oi_gex"
+      ],
+      "feature": "Gamma Balance",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "open_interest",
+        "option_quotes",
+        "spx_index",
+        "rate",
+        "dividend",
+        "contract_metadata"
+      ],
+      "spx": "REQUIRED",
+      "trades": "OPTIONAL"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "gamma_balance",
+        "gamma_flip"
+      ],
+      "feature": "Gamma Regime",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "open_interest",
+        "option_quotes",
+        "spx_index",
+        "rate",
+        "dividend",
+        "contract_metadata"
+      ],
+      "spx": "REQUIRED",
+      "trades": "OPTIONAL"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "gamma_regime",
+        "levels"
+      ],
+      "feature": "Mean Reversion signal",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "spx_index"
+      ],
+      "spx": "REQUIRED",
+      "trades": "OPTIONAL"
+    },
+    {
+      "current_readiness": "BLOCKED_RECONSTRUCTION",
+      "derived_inputs": [
+        "gamma_regime",
+        "levels"
+      ],
+      "feature": "Breakout/Breakdown signal",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "spx_index"
+      ],
+      "spx": "REQUIRED",
+      "trades": "OPTIONAL"
+    },
+    {
+      "current_readiness": "BLOCKED_VALIDATION",
+      "derived_inputs": [
+        "signals",
+        "gamma_regime"
+      ],
+      "feature": "Risk gate",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "spx_index"
+      ],
+      "spx": "REQUIRED",
+      "trades": "OPTIONAL"
+    },
+    {
+      "current_readiness": "BLOCKED_VALIDATION",
+      "derived_inputs": [
+        "risk_gate",
+        "signals"
+      ],
+      "feature": "Entry permission",
+      "local_greeks": "REQUIRED",
+      "oi": "REQUIRED",
+      "quotes": "REQUIRED",
+      "raw_inputs": [
+        "spx_index"
+      ],
+      "spx": "REQUIRED",
+      "trades": "OPTIONAL"
+    }
+  ],
+  "mapping_promotions": 0,
+  "minimum_provenance_fields": [
+    "provider",
+    "dataset",
+    "contract_identity",
+    "event_time",
+    "available_time",
+    "source_or_reference_time",
+    "retrieval_context",
+    "policy_version",
+    "mapping_version",
+    "model_version",
+    "transformation_version"
+  ],
+  "next_minimum_phase": "offline human policy/evidence specification for causal timestamps, source-specific corrections, missingness, staleness, alignment, calendar/metadata and required depth; no acquisition or loader",
+  "phase": "5C-4B.5A",
+  "priorities": {
+    "alignment.policy": "UPSTREAM_BLOCKER",
+    "dividend.policy": "FOUNDATIONAL_BLOCKER",
+    "historical.depth": "DOWNSTREAM_BLOCKER",
+    "local.iv_greeks": "DOWNSTREAM_BLOCKER",
+    "metadata.contract": "FOUNDATIONAL_BLOCKER",
+    "oi.causal_row": "FOUNDATIONAL_BLOCKER",
+    "quotes.available_time": "FOUNDATIONAL_BLOCKER",
+    "quotes.corrections": "UPSTREAM_BLOCKER",
+    "rate.policy": "FOUNDATIONAL_BLOCKER",
+    "session.bundle": "DOWNSTREAM_BLOCKER",
+    "spx.acquisition": "FOUNDATIONAL_BLOCKER",
+    "spx.causal_series": "UPSTREAM_BLOCKER",
+    "staleness.policy": "UPSTREAM_BLOCKER",
+    "trades.acquisition": "OPTIONAL_ENHANCEMENT",
+    "trades.tape_semantics": "OPTIONAL_ENHANCEMENT"
+  },
+  "promotion_gates": [
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_AVAILABILITY",
+      "gap_id": "quotes.available_time",
+      "promotion_target": "CAUSAL_OPTION_QUOTE",
+      "required_evidence": [
+        "point-in-time receipt/availability evidence or a defensible bounded availability contract",
+        "quote schema evidence for event ordering, NBBO conditions, and zero values"
+      ],
+      "required_human_decision": [
+        "approve a conservative availability rule without converting event_time directly"
+      ],
+      "required_implementation": [
+        "versioned point-in-time quote selector preserving MISSING/ZERO/UNKNOWN"
+      ],
+      "required_tests": [
+        "future-event rejection",
+        "late-arrival and zero-market fixtures",
+        "no future interpolation/backfill"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_CORRECTION_POLICY",
+      "gap_id": "quotes.corrections",
+      "promotion_target": "POINT_IN_TIME_QUOTES",
+      "required_evidence": [
+        "provider evidence for historical quote revision/correction behavior"
+      ],
+      "required_human_decision": [
+        "approve source-specific as-of policy"
+      ],
+      "required_implementation": [
+        "deterministic correction-aware selector"
+      ],
+      "required_tests": [
+        "late correction known-before/after replay_time"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_ENTITLEMENT_AMBIGUITY",
+      "gap_id": "trades.acquisition",
+      "promotion_target": "ACCOUNT_ACQUISITION_CLASSIFIED",
+      "required_evidence": [
+        "separately authorized non-empty schema observation or explicit denial"
+      ],
+      "required_human_decision": [],
+      "required_implementation": [
+        "none in this phase"
+      ],
+      "required_tests": [
+        "distinguish empty-valid from denied/error"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_CORRECTION_POLICY",
+      "gap_id": "trades.tape_semantics",
+      "promotion_target": "CAUSAL_TRADE_TAPE",
+      "required_evidence": [
+        "receipt/availability ordering and deterministic cancel/correction linkage evidence"
+      ],
+      "required_human_decision": [
+        "decide unresolved-record exclusion policy per feature"
+      ],
+      "required_implementation": [
+        "sequence-wrap-aware point-in-time tape reconstruction"
+      ],
+      "required_tests": [
+        "wrap, duplicate, late, cancel, correction and unlinked-record fixtures"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_AVAILABILITY",
+      "gap_id": "oi.causal_row",
+      "promotion_target": "CAUSAL_OPEN_INTEREST",
+      "required_evidence": [
+        "client available_time evidence and authoritative-row/correction semantics",
+        "coverage evidence distinguishing no message from zero"
+      ],
+      "required_human_decision": [
+        "approve as-of selection, missingness and correction policy"
+      ],
+      "required_implementation": [
+        "point-in-time OI selector that never assumes 06:30 ET availability"
+      ],
+      "required_tests": [
+        "multiple messages",
+        "zero versus no-message",
+        "published after replay_time"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_ACQUISITION",
+      "gap_id": "spx.acquisition",
+      "promotion_target": "ACCOUNT_ACQUISITION_VERIFIED",
+      "required_evidence": [
+        "separately authorized successful account-specific schema observation"
+      ],
+      "required_human_decision": [],
+      "required_implementation": [
+        "none in this phase"
+      ],
+      "required_tests": [
+        "classify transport error separately from denial and empty success"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_AVAILABILITY",
+      "gap_id": "spx.causal_series",
+      "promotion_target": "CAUSAL_UNDERLYING",
+      "required_evidence": [
+        "client available_time/depth evidence plus feed gap and correction semantics"
+      ],
+      "required_human_decision": [
+        "approve missingness/staleness policy; no proxy fallback is currently approved"
+      ],
+      "required_implementation": [
+        "point-in-time selector preserving unchanged-value/no-tick semantics"
+      ],
+      "required_tests": [
+        "gaps, stale print, corrections, DST and future print rejection"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_HUMAN_DECISION",
+      "gap_id": "rate.policy",
+      "promotion_target": "CAUSAL_RATE",
+      "required_evidence": [
+        "publication timestamps and value provenance"
+      ],
+      "required_human_decision": [
+        "choose/version last causally published rate, fixed rate, or another explicit policy"
+      ],
+      "required_implementation": [
+        "as-of publication-time selector"
+      ],
+      "required_tests": [
+        "same-date D+1 exclusion",
+        "weekend/holiday and absent publication"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_HUMAN_DECISION",
+      "gap_id": "dividend.policy",
+      "promotion_target": "CAUSAL_DIVIDEND",
+      "required_evidence": [
+        "historical/versioned dividend-yield evidence if nonzero is proposed"
+      ],
+      "required_human_decision": [
+        "approve/version ZERO or another explicit policy and accept model risk"
+      ],
+      "required_implementation": [
+        "policy-bound input construction"
+      ],
+      "required_tests": [
+        "unapproved ZERO rejection",
+        "version/provenance validation"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_METADATA",
+      "gap_id": "metadata.contract",
+      "promotion_target": "CAUSAL_CONTRACT_METADATA",
+      "required_evidence": [
+        "historical root, identity, strike/right, expiration time, settlement style, reference/available time and provenance"
+      ],
+      "required_human_decision": [
+        "approve derivation rules for ordinary dates; retain special/holiday fail-closed"
+      ],
+      "required_implementation": [
+        "versioned metadata/calendar resolver"
+      ],
+      "required_tests": "DST, holiday, early close, AM/PM, SPX/SPXW and special expiration fixtures"
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_ALIGNMENT",
+      "gap_id": "alignment.policy",
+      "promotion_target": "CAUSAL_ALIGNMENT",
+      "required_evidence": [
+        "both feeds' event and available times plus empirical skew/latency coverage"
+      ],
+      "required_human_decision": [
+        "approve maximum event-time and available-time skew"
+      ],
+      "required_implementation": [
+        "LAST_CAUSALLY_AVAILABLE selector"
+      ],
+      "required_tests": [
+        "reject nearest future/interpolation/backfill",
+        "boundary skew and stale input"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_STALENESS_POLICY",
+      "gap_id": "staleness.policy",
+      "promotion_target": "APPROVED_STALENESS",
+      "required_evidence": [
+        "empirical quote/SPX update cadence, outages, latency and coverage by session regime"
+      ],
+      "required_human_decision": [
+        "approve separate max quote age, max SPX age and cross-feed skew"
+      ],
+      "required_implementation": [
+        "versioned source-specific age gates"
+      ],
+      "required_tests": [
+        "at/beyond boundary",
+        "no threshold means blocked"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_HISTORICAL_DEPTH",
+      "gap_id": "historical.depth",
+      "promotion_target": "SUFFICIENT_ACCOUNT_VERIFIED_DEPTH",
+      "required_evidence": [
+        "account-specific earliest/latest accessible dates and representative continuity per required dataset"
+      ],
+      "required_human_decision": [
+        "define required backtest period"
+      ],
+      "required_implementation": [
+        "offline depth manifest only after authorization"
+      ],
+      "required_tests": "coverage holes and requested period boundaries"
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_RECONSTRUCTION",
+      "gap_id": "local.iv_greeks",
+      "promotion_target": "ELIGIBLE_FOR_REPLAY",
+      "required_evidence": [
+        "causal quote, underlying, rate, dividend, metadata, alignment, staleness and complete provenance"
+      ],
+      "required_human_decision": [
+        "approve all upstream policies and real-replay use"
+      ],
+      "required_implementation": [
+        "versioned deterministic bridge using LOCAL_SPX_IV_BISECTION_V1, LOCAL_SPX_BS_V1, MID_V1 and ACTUAL_SECONDS_OVER_365_DAYS_V1"
+      ],
+      "required_tests": [
+        "repeatability",
+        "real-input contract validation",
+        "failure/no-arbitrage boundaries"
+      ]
+    },
+    {
+      "automatic_promotion_allowed": false,
+      "current_state": "BLOCKED_VALIDATION",
+      "gap_id": "session.bundle",
+      "promotion_target": "CAUSALLY_REPLAY_ELIGIBLE",
+      "required_evidence": [
+        "eligible inputs and provenance for every requested required feature"
+      ],
+      "required_human_decision": [
+        "approve configuration and mapping versions"
+      ],
+      "required_implementation": [
+        "pure gate integration before any loader"
+      ],
+      "required_tests": [
+        "complete blocker accumulation",
+        "unknown requirement invalid",
+        "one blocked required input blocks session"
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "topological_order": [
+    "alignment.policy",
+    "dividend.policy",
+    "causal_dividend",
+    "historical.depth",
+    "metadata.contract",
+    "causal_contract_metadata",
+    "oi.causal_row",
+    "quotes.available_time",
+    "quotes.corrections",
+    "causal_option_mid",
+    "rate.policy",
+    "causal_rate",
+    "spx.acquisition",
+    "spx.causal_series",
+    "causal_underlying",
+    "staleness.policy",
+    "local.iv_greeks",
+    "static_oi_gex",
+    "trades.acquisition",
+    "trades.tape_semantics",
+    "aggressor_classification",
+    "dealer_flow",
+    "dynamic_gex",
+    "signal_replay",
+    "session.bundle"
+  ],
+  "trade_requirements": {
+    "aggressor_classification": "REQUIRED",
+    "dealer_flow_estimation": "REQUIRED",
+    "dynamic_gex": "REQUIRED",
+    "quote_based_iv_reconstruction": "NOT_REQUIRED",
+    "signal_reconstruction": "OPTIONAL"
+  }
+}
