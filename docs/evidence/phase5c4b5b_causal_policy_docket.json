@@ -1,0 +1,2308 @@
+{
+  "decision_packets": [
+    {
+      "admissible_options": [
+        "evidence-backed availability",
+        "condition-aware as-of policy",
+        "approved age gate",
+        "exclude"
+      ],
+      "decision_id": "Q1",
+      "downstream_effect": [
+        "quotes",
+        "local IV/Greeks",
+        "GEX"
+      ],
+      "evidence_available": [
+        "NBBO/event time; acquisition verified; missing sequence/receipt and correction semantics"
+      ],
+      "evidence_missing": [
+        "availability bound",
+        "correction semantics",
+        "cadence/latency coverage"
+      ],
+      "prohibited_options": [
+        "event=available",
+        "latest-row-wins",
+        "invented age",
+        "future values"
+      ],
+      "question": "Which availability, correction and quote-age policies make quotes causal?",
+      "related_blockers": [
+        "B01",
+        "B02",
+        "B03"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": true,
+      "residual_risk": [
+        "latency tails",
+        "correction ambiguity",
+        "coverage loss"
+      ],
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "Quotes feed local IV and cross-feed joins."
+    },
+    {
+      "admissible_options": [
+        "as-of message policy",
+        "preserve four states",
+        "exclude"
+      ],
+      "decision_id": "Q2",
+      "downstream_effect": [
+        "walls",
+        "static OI/GEX"
+      ],
+      "evidence_available": [
+        "previous-day OI; daily message; multiple rows; no flag"
+      ],
+      "evidence_missing": [
+        "receipt/bound",
+        "replacement semantics",
+        "coverage classification"
+      ],
+      "prohibited_options": [
+        "message=available",
+        "latest-row-wins",
+        "no-row=zero"
+      ],
+      "question": "Which OI availability, correction and four-state missingness policies are approved?",
+      "related_blockers": [
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": true,
+      "residual_risk": [
+        "unflagged corrections",
+        "missingness ambiguity"
+      ],
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "OI walls/static GEX require causal, typed OI."
+    },
+    {
+      "admissible_options": [
+        "classified acquisition plus evidenced as-of/state rules",
+        "exclude"
+      ],
+      "decision_id": "Q3",
+      "downstream_effect": [
+        "SPX",
+        "alignment",
+        "local IV/Greeks"
+      ],
+      "evidence_available": [
+        "transport error; exchange timestamp; separate feed; unchanged may not print"
+      ],
+      "evidence_missing": [
+        "acquisition outcome",
+        "receipt/bound",
+        "gap/cadence evidence"
+      ],
+      "prohibited_options": [
+        "Options implies Indices",
+        "event=available",
+        "silent fill",
+        "invented age"
+      ],
+      "question": "After acquisition classification, which SPX availability, state, gap and age policies are approved?",
+      "related_blockers": [
+        "B07",
+        "B08",
+        "B09",
+        "B10"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": true,
+      "residual_risk": [
+        "feed latency",
+        "state error",
+        "coverage loss"
+      ],
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "A causal underlying is mandatory for local IV/Greeks."
+    },
+    {
+      "admissible_options": [
+        "separate evidence-backed limits",
+        "fail-closed unaligned"
+      ],
+      "decision_id": "Q4",
+      "downstream_effect": [
+        "aligned local IV inputs"
+      ],
+      "evidence_available": [
+        "LAST_CAUSALLY_AVAILABLE representable; future joins prohibited"
+      ],
+      "evidence_missing": [
+        "empirical cadence/latency/outage/skew coverage"
+      ],
+      "prohibited_options": [
+        "one shared invented limit",
+        "future interpolation/backfill/nearest"
+      ],
+      "question": "Which distinct quote age, SPX age, event skew and availability skew limits are approved?",
+      "related_blockers": [
+        "B03",
+        "B09",
+        "B11"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": true,
+      "residual_risk": [
+        "clock/latency model error",
+        "coverage loss"
+      ],
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "Temporal compatibility cannot be inferred from timestamps alone."
+    },
+    {
+      "admissible_options": [
+        "causal reconstructable subset",
+        "exclude unresolved records",
+        "declare branch non-reproducible"
+      ],
+      "decision_id": "Q5",
+      "downstream_effect": [
+        "dealer flow",
+        "aggressor classification",
+        "dynamic GEX"
+      ],
+      "evidence_available": [
+        "empty success; wrapping sequence; unlinked codes; no receipt time"
+      ],
+      "evidence_missing": [
+        "acquisition classification",
+        "linkage/ordering",
+        "availability bound"
+      ],
+      "prohibited_options": [
+        "infer entitlement",
+        "invent links",
+        "exchange=available"
+      ],
+      "question": "Is the trade branch supportable, and under which point-in-time correction and availability rules?",
+      "related_blockers": [
+        "B12",
+        "B13",
+        "B14"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": true,
+      "residual_risk": [
+        "incomplete tape",
+        "unlinked cancels",
+        "latency"
+      ],
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "Dealer flow/aggressor/dynamic GEX require trades."
+    },
+    {
+      "admissible_options": [
+        "last causally published",
+        "fixed versioned",
+        "other approved causal policy"
+      ],
+      "decision_id": "Q6",
+      "downstream_effect": [
+        "local IV and Greeks"
+      ],
+      "evidence_available": [
+        "publication time; D rate published D+1"
+      ],
+      "evidence_missing": [],
+      "prohibited_options": [
+        "same-day before publication",
+        "unversioned rate"
+      ],
+      "question": "Which causal rate policy is approved?",
+      "related_blockers": [
+        "B15"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": false,
+      "residual_risk": "staleness/model/source risk",
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "Black-Scholes requires a rate."
+    },
+    {
+      "admissible_options": [
+        "zero",
+        "fixed versioned",
+        "historical causal",
+        "other explicit assumption"
+      ],
+      "decision_id": "Q7",
+      "downstream_effect": [
+        "IV",
+        "all Greeks",
+        "GEX"
+      ],
+      "evidence_available": [
+        "ZERO is test-only"
+      ],
+      "evidence_missing": [
+        "causal history only if selected"
+      ],
+      "prohibited_options": [
+        "automatic test-zero promotion",
+        "future information"
+      ],
+      "question": "Which versioned dividend policy and model risk are approved?",
+      "related_blockers": [
+        "B16"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": false,
+      "residual_risk": "model/publication risk",
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "Black-Scholes requires dividend yield."
+    },
+    {
+      "admissible_options": [
+        "versioned historical rules",
+        "exclude specials"
+      ],
+      "decision_id": "Q8",
+      "downstream_effect": [
+        "universe",
+        "time to expiry",
+        "local IV/Greeks"
+      ],
+      "evidence_available": [
+        "partial fields; NY timezone; date=D rule"
+      ],
+      "evidence_missing": [
+        "historical session/listing/settlement evidence"
+      ],
+      "prohibited_options": [
+        "current calendar historically",
+        "assume settlement/time"
+      ],
+      "question": "Which historical metadata/calendar rules and fail-closed exceptions are approved?",
+      "related_blockers": [
+        "B17",
+        "B18"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": true,
+      "residual_risk": [
+        "historical change",
+        "survivorship"
+      ],
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "Contract identity and time-to-expiry require historical rules."
+    },
+    {
+      "admissible_options": [
+        "explicit sessions/span/regimes/components/continuity"
+      ],
+      "decision_id": "Q9",
+      "downstream_effect": [
+        "future backtest readiness only"
+      ],
+      "evidence_available": [
+        "SINGLE_DATE_ONLY"
+      ],
+      "evidence_missing": [
+        "account coverage after target definition"
+      ],
+      "prohibited_options": [
+        "invented number",
+        "single date sufficient"
+      ],
+      "question": "What versioned minimum historical depth is required?",
+      "related_blockers": [
+        "B19"
+      ],
+      "requires_future_authorization": true,
+      "requires_new_external_evidence": true,
+      "residual_risk": "sampling/regime risk",
+      "reversible": true,
+      "status": "PENDING",
+      "why_needed": "Sufficiency cannot be assessed without a target."
+    }
+  ],
+  "dockets": [
+    {
+      "admissible_decision_classes": [
+        "PROVIDER_SUPPLIED_AVAILABILITY_TIME",
+        "DETERMINISTIC_LATENCY_UPPER_BOUND",
+        "CONSERVATIVE_HUMAN_APPROVED_TRANSFORM",
+        "FAIL_CLOSED_EXCLUSION"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B01",
+      "component": "option_quotes",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "Which evidence-backed transform establishes when each quote was knowable to the client?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B02",
+        "B03",
+        "B11"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "Treating exchange event time or a retrospective artifact as availability admits quotes not known by replay time.",
+      "missing_evidence": [
+        "provider receipt/availability timestamp, or documented deterministic maximum latency bound",
+        "coverage proving the bound for the intended historical product/account"
+      ],
+      "name": "QUOTE_AVAILABLE_TIME",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b4c2_thetadata_account/evidence_summary.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "OPRA NBBO and option event timestamp are persisted",
+        "account quote acquisition is VERIFIED_AVAILABLE",
+        "sequence and receipt time are absent",
+        "historical download does not prove client availability"
+      ],
+      "prohibited_decision_classes": [
+        "EVENT_TIME_EQUALS_AVAILABLE_TIME_WITHOUT_EVIDENCE",
+        "AVERAGE_LATENCY",
+        "FUTURE_TICK",
+        "RETROSPECTIVE_DOWNLOAD_TIME"
+      ],
+      "promotion_preconditions": [
+        "external evidence retained",
+        "human policy approval",
+        "implementation and validation complete"
+      ],
+      "promotion_target": "CAUSAL_OPTION_QUOTE_TIME",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "versioned as-of quote selector",
+        "preserve event_time, available_time and provenance"
+      ],
+      "required_future_tests": [
+        "reject available_time after replay_time",
+        "bound boundary and late-arrival fixtures",
+        "reject missing availability"
+      ],
+      "residual_risks": [
+        "clock-domain uncertainty",
+        "tail latency beyond a documented bound",
+        "excluded observations reduce coverage"
+      ],
+      "runtime_change_required": true,
+      "status": "POLICY_DEFINITION_REQUIRED",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": []
+    },
+    {
+      "admissible_decision_classes": [
+        "CONDITION_AWARE_AS_OF_SELECTION",
+        "EXCLUDE_UNRESOLVED_CONDITIONS",
+        "FAIL_CLOSED_SOURCE_EXCLUSION"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B02",
+      "component": "option_quotes",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "After provider semantics are known, how must corrected, invalid, crossed, locked, zero-bid and zero-ask quotes be classified as of T?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B11"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "A correction observed after T can overwrite the quote actually known at T.",
+      "missing_evidence": [
+        "provider semantics for corrections and condition codes",
+        "point-in-time replacement/linkage behavior"
+      ],
+      "name": "QUOTE_CORRECTION_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b2_thetadata/evidence_ledger.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "bid/ask condition fields were observed",
+        "no sequence, correction flag, replacement semantics or linked correction was demonstrated"
+      ],
+      "prohibited_decision_classes": [
+        "LATEST_ROW_WINS",
+        "RETROSPECTIVE_OVERWRITE",
+        "ZERO_AS_MISSING_WITHOUT_POLICY",
+        "INVENTED_CORRECTION_LINKAGE"
+      ],
+      "promotion_preconditions": [
+        "B01 promoted",
+        "provider semantics persisted",
+        "human policy approval",
+        "tests pass"
+      ],
+      "promotion_target": "POINT_IN_TIME_QUOTES",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "versioned condition/correction classifier",
+        "separate provider facts from approved policy outcomes"
+      ],
+      "required_future_tests": [
+        "corrected-before/after-T",
+        "invalid/crossed/locked",
+        "zero bid and zero ask",
+        "unknown code fails closed"
+      ],
+      "residual_risks": [
+        "unknown codes remain excluded",
+        "crossed/locked markets may be valid or erroneous by venue semantics",
+        "coverage loss"
+      ],
+      "runtime_change_required": true,
+      "status": "POLICY_DEFINITION_REQUIRED",
+      "technical_priority": "UPSTREAM_BLOCKER",
+      "upstream_dependencies": [
+        "B01"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "EMPIRICAL_HUMAN_APPROVED_THRESHOLD",
+        "FAIL_CLOSED_NO_REUSE",
+        "SOURCE_OR_REGIME_SPECIFIC_THRESHOLDS"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B03",
+      "component": "option_quotes",
+      "current_readiness_state": "NO_THRESHOLD_APPROVED",
+      "decision_question": "What versioned maximum quote age, if any, is acceptable per session regime?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B11"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "An old quote can be paired with later inputs and appear contemporaneous.",
+      "missing_evidence": [
+        "empirical quote update cadence, outages, latency and session-regime coverage"
+      ],
+      "name": "QUOTE_STALENESS_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "no maximum quote age is approved"
+      ],
+      "prohibited_decision_classes": [
+        "INVENTED_SECONDS_OR_MILLISECONDS",
+        "SPX_AGE_AS_QUOTE_AGE",
+        "CROSS_FEED_SKEW_AS_QUOTE_AGE",
+        "SILENT_UNBOUNDED_REUSE"
+      ],
+      "promotion_preconditions": [
+        "B01 promoted",
+        "empirical evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "APPROVED_QUOTE_STALENESS",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "versioned independent quote-age gate"
+      ],
+      "required_future_tests": [
+        "no threshold remains blocked",
+        "at/beyond-boundary",
+        "outage and missing timestamp fail closed"
+      ],
+      "residual_risks": [
+        "threshold model error",
+        "coverage loss near outages"
+      ],
+      "runtime_change_required": true,
+      "status": "POLICY_DEFINITION_REQUIRED",
+      "technical_priority": "UPSTREAM_BLOCKER",
+      "upstream_dependencies": [
+        "B01"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "PROVIDER_SUPPLIED_AVAILABILITY_TIME",
+        "DETERMINISTIC_LATENCY_UPPER_BOUND",
+        "CONSERVATIVE_APPROVED_TRANSFORM",
+        "EXCLUSION"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B04",
+      "component": "open_interest",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "When was each OI message causally available to the client?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B05",
+        "B06"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "A daily message can be selected before it reached the client.",
+      "missing_evidence": [
+        "client receipt/availability evidence or deterministic bound",
+        "coverage across relevant publication regimes"
+      ],
+      "name": "OI_AVAILABLE_TIME",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b4c2_thetadata_account/evidence_summary.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "OI denotes previous-trading-day OI",
+        "OPRA daily-message timestamp exists",
+        "multiple messages are possible",
+        "there is no demonstrated pre-09:30 SLA",
+        "message event time is not client availability"
+      ],
+      "prohibited_decision_classes": [
+        "MESSAGE_TIME_AUTOMATICALLY_EQUALS_AVAILABLE_TIME",
+        "ASSUMED_PREOPEN_SLA",
+        "RETROSPECTIVE_DOWNLOAD_TIME"
+      ],
+      "promotion_preconditions": [
+        "availability evidence",
+        "human approval",
+        "implementation and validation"
+      ],
+      "promotion_target": "CAUSAL_OI_TIME",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "point-in-time OI message selector"
+      ],
+      "required_future_tests": [
+        "published/received after T rejected",
+        "multiple-message ordering",
+        "missing availability rejected"
+      ],
+      "residual_risks": [
+        "publication and transport variability",
+        "coverage loss"
+      ],
+      "runtime_change_required": true,
+      "status": "POLICY_DEFINITION_REQUIRED",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": []
+    },
+    {
+      "admissible_decision_classes": [
+        "PROVEN_REPLACEMENT_SEMANTICS",
+        "LATEST_KNOWN_MESSAGE_AFTER_AVAILABILITY_PROOF",
+        "EXCLUDE_CONFLICTS"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B05",
+      "component": "open_interest",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "How are multiple causally available OI messages, conflicts and possible replacements resolved?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B06"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "A later correction can leak into an earlier replay state.",
+      "missing_evidence": [
+        "message replacement/conflict semantics",
+        "evidence permitting correction detection and provenance"
+      ],
+      "name": "OI_CORRECTION_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "multiple OI rows/messages may occur",
+        "no correction flag or linked replacement is demonstrated"
+      ],
+      "prohibited_decision_classes": [
+        "LATEST_ROW_WINS_AUTOMATICALLY",
+        "RETROSPECTIVE_OVERWRITE",
+        "INVENTED_CORRECTION_FLAG"
+      ],
+      "promotion_preconditions": [
+        "B04 promoted",
+        "replacement semantics",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "POINT_IN_TIME_OI_MESSAGES",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "provenance-preserving as-of conflict resolver"
+      ],
+      "required_future_tests": [
+        "conflict fixtures",
+        "later-known replacement excluded at earlier T",
+        "deterministic provenance"
+      ],
+      "residual_risks": [
+        "unflagged correction ambiguity",
+        "excluded conflicts"
+      ],
+      "runtime_change_required": true,
+      "status": "POLICY_DEFINITION_REQUIRED",
+      "technical_priority": "UPSTREAM_BLOCKER",
+      "upstream_dependencies": [
+        "B04"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "PRESERVE_FOUR_STATE_MISSINGNESS",
+        "EVIDENCE_SCOPED_ZERO_RULE",
+        "FAIL_CLOSED_EXCLUSION"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B06",
+      "component": "open_interest",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "For each evidenced absence class, should the value remain NO_MESSAGE/MISSING/UNKNOWN, become an explicitly approved zero, or exclude the contract?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_PARTIAL",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "Zero imputation can fabricate OI and GEX that was not causally observed.",
+      "missing_evidence": [
+        "coverage evidence distinguishing no message from acquisition/coverage failure"
+      ],
+      "name": "OI_MISSINGNESS_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "absence of a message can mean no reportable OI exists",
+        "MISSING, ZERO, NO_MESSAGE and UNKNOWN are distinct"
+      ],
+      "prohibited_decision_classes": [
+        "NO_ROW_EQUALS_ZERO",
+        "SILENT_IMPUTATION",
+        "COLLAPSE_UNKNOWN_TO_NO_MESSAGE"
+      ],
+      "promotion_preconditions": [
+        "B04 and B05 promoted",
+        "coverage evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "APPROVED_OI_MISSINGNESS",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "typed missingness representation and policy gate"
+      ],
+      "required_future_tests": [
+        "each of four states",
+        "no-row never silently zero",
+        "unknown coverage fails closed"
+      ],
+      "residual_risks": [
+        "provider non-reporting ambiguity",
+        "coverage loss"
+      ],
+      "runtime_change_required": true,
+      "status": "POLICY_DEFINITION_REQUIRED",
+      "technical_priority": "UPSTREAM_BLOCKER",
+      "upstream_dependencies": [
+        "B04",
+        "B05"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "CLASSIFY_AVAILABLE",
+        "CLASSIFY_DENIED",
+        "CLASSIFY_TRANSPORT_ERROR",
+        "CLASSIFY_EMPTY",
+        "CLASSIFY_SCHEMA_ERROR"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B07",
+      "component": "spx_historical_spot",
+      "current_readiness_state": "ERROR/TRANSPORT_ERROR/UNRESOLVED",
+      "decision_question": "What is the account-specific SPX index acquisition outcome under one controlled authorized request?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B08",
+        "B09",
+        "B10"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "Misclassifying acquisition can cause use of absent or unauthorized data.",
+      "missing_evidence": [
+        "separately authorized minimal account-specific observation that distinguishes AVAILABLE, DENIED, TRANSPORT_ERROR, EMPTY and SCHEMA_ERROR"
+      ],
+      "name": "SPX_ACCOUNT_ACQUISITION",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "docs/evidence/phase5c4b4c2_thetadata_account/evidence_summary.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "P8 produced ERROR/TRANSPORT_ERROR/UNRESOLVED",
+        "Options entitlement does not imply Indices entitlement"
+      ],
+      "prohibited_decision_classes": [
+        "INFER_AVAILABLE_FROM_OPTIONS",
+        "INFER_DENIED_FROM_TRANSPORT_ERROR",
+        "REPEAT_PROBE_WITHOUT_AUTHORIZATION"
+      ],
+      "promotion_preconditions": [
+        "future authorization",
+        "minimal retained result",
+        "human review"
+      ],
+      "promotion_target": "ACCOUNT_ACQUISITION_CLASSIFIED",
+      "reprobe_required": true,
+      "required_future_implementation": [
+        "no runtime implementation until acquisition is classified"
+      ],
+      "required_future_tests": [
+        "classification fixtures remain mutually exclusive",
+        "raw evidence schema validation"
+      ],
+      "residual_risks": [
+        "transient transport ambiguity",
+        "single observation has limited depth"
+      ],
+      "runtime_change_required": false,
+      "status": "ACCOUNT_VERIFICATION_REQUIRED",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": []
+    },
+    {
+      "admissible_decision_classes": [
+        "PROVIDER_SUPPLIED_AVAILABILITY_TIME",
+        "DETERMINISTIC_LATENCY_UPPER_BOUND",
+        "CONSERVATIVE_APPROVED_TRANSFORM",
+        "EXCLUSION"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B08",
+      "component": "spx_historical_spot",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "After B07, which evidence-backed rule establishes when an SPX print was client-available?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B09",
+        "B10",
+        "B11"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "UPSTREAM_FIRST",
+      "lookahead_risk": "Exchange time can precede the client's knowledge of the separate feed.",
+      "missing_evidence": [
+        "client receipt/availability timestamp or deterministic maximum bound"
+      ],
+      "name": "SPX_AVAILABLE_TIME",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "Cboe Global Indices Feed exchange timestamp is represented",
+        "Cboe and OPRA are separate feeds without shared sequence",
+        "no client availability bound is demonstrated"
+      ],
+      "prohibited_decision_classes": [
+        "EVENT_TIME_EQUALS_AVAILABLE_TIME",
+        "SHARED_OPRA_SEQUENCE",
+        "AVERAGE_LATENCY",
+        "FUTURE_PRINT"
+      ],
+      "promotion_preconditions": [
+        "B07 classified AVAILABLE",
+        "availability evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "CAUSAL_SPX_TIME",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "versioned SPX as-of selector"
+      ],
+      "required_future_tests": [
+        "future print rejection",
+        "late arrival",
+        "clock/bound boundaries"
+      ],
+      "residual_risks": [
+        "independent clock domains",
+        "tail latency",
+        "coverage loss"
+      ],
+      "runtime_change_required": true,
+      "status": "BLOCKED_UPSTREAM",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": [
+        "B07"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "EVIDENCE_BACKED_STATE_CLASSIFIER_AND_THRESHOLD",
+        "FAIL_CLOSED_NO_REUSE"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B09",
+      "component": "spx_historical_spot",
+      "current_readiness_state": "NO_THRESHOLD_APPROVED",
+      "decision_question": "How is unchanged-but-current distinguished from missing/gapped and stale, and what maximum SPX age is approved?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B11"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "UPSTREAM_FIRST",
+      "lookahead_risk": "An old index value can be treated as contemporaneous or a valid unchanged interval can be discarded.",
+      "missing_evidence": [
+        "empirical cadence, unchanged intervals, gaps, outages and session regimes"
+      ],
+      "name": "SPX_STALENESS_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "no maximum SPX age is approved",
+        "SPX may not print while unchanged"
+      ],
+      "prohibited_decision_classes": [
+        "INVENTED_THRESHOLD",
+        "NO_PRINT_EQUALS_STALE",
+        "NO_PRINT_EQUALS_UNCHANGED",
+        "QUOTE_AGE_AS_SPX_AGE"
+      ],
+      "promotion_preconditions": [
+        "B07/B08 promoted",
+        "empirical evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "APPROVED_SPX_STALENESS",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "SPX-specific state and age gate"
+      ],
+      "required_future_tests": [
+        "unchanged/missing/stale fixtures",
+        "at/beyond-boundary",
+        "no threshold blocks"
+      ],
+      "residual_risks": [
+        "state-classification error",
+        "threshold model risk"
+      ],
+      "runtime_change_required": true,
+      "status": "BLOCKED_UPSTREAM",
+      "technical_priority": "UPSTREAM_BLOCKER",
+      "upstream_dependencies": [
+        "B07",
+        "B08"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "TYPED_GAP_CLASSIFICATION",
+        "BOUNDED_APPROVED_HOLD",
+        "FAIL_CLOSED_EXCLUSION"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B10",
+      "component": "spx_historical_spot",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "What evidenced state and action apply to missing seconds, session gaps, feed interruption, unchanged value and no print?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B11"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "UPSTREAM_FIRST",
+      "lookahead_risk": "Silent fill can carry later knowledge or conceal an outage.",
+      "missing_evidence": [
+        "coverage/gap semantics for missing seconds, session gaps and interruptions"
+      ],
+      "name": "SPX_MISSINGNESS_GAP_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "no gap or coverage flags are demonstrated",
+        "unchanged value and no print are not equivalent to a proved feed gap"
+      ],
+      "prohibited_decision_classes": [
+        "SILENT_FORWARD_FILL",
+        "NO_PRINT_AUTOMATICALLY_UNCHANGED",
+        "PROXY_FALLBACK_WITHOUT_APPROVAL"
+      ],
+      "promotion_preconditions": [
+        "B07/B08 promoted",
+        "gap evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "APPROVED_SPX_GAP_POLICY",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "typed missingness/gap gate with provenance"
+      ],
+      "required_future_tests": [
+        "all five cases",
+        "unknown fails closed",
+        "no silent fill"
+      ],
+      "residual_risks": [
+        "coverage flags may remain unavailable",
+        "exclusion reduces sessions"
+      ],
+      "runtime_change_required": true,
+      "status": "BLOCKED_UPSTREAM",
+      "technical_priority": "UPSTREAM_BLOCKER",
+      "upstream_dependencies": [
+        "B07",
+        "B08"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "LAST_CAUSALLY_AVAILABLE_WITH_APPROVED_DUAL_BOUNDS",
+        "FAIL_CLOSED_UNALIGNED"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B11",
+      "component": "cross_feed_temporal_alignment",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "What separate maximum event-time and available-time skew boundaries permit LAST_CAUSALLY_AVAILABLE alignment?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_PARTIAL",
+      "external_data_required": true,
+      "human_decision_required": "UPSTREAM_FIRST",
+      "lookahead_risk": "Cross-feed pairing may use an input unavailable at T or falsely contemporaneous.",
+      "missing_evidence": [
+        "both feeds' proven available times",
+        "empirical event-time and available-time skew distributions"
+      ],
+      "name": "CROSS_FEED_ALIGNMENT_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/causal_greeks_inputs.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "LAST_CAUSALLY_AVAILABLE is representable",
+        "OPRA and Cboe have no shared sequence",
+        "event_time_skew and available_time_skew are distinct"
+      ],
+      "prohibited_decision_classes": [
+        "NEAREST_FUTURE",
+        "FUTURE_INTERPOLATION",
+        "FUTURE_BACKFILL",
+        "INVENTED_MAX_SKEW",
+        "EVENT_SKEW_AS_AVAILABLE_SKEW"
+      ],
+      "promotion_preconditions": [
+        "all upstream time/staleness/gap blockers promoted",
+        "empirical evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "CAUSAL_CROSS_FEED_ALIGNMENT",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "versioned last-causally-available join with two skew checks"
+      ],
+      "required_future_tests": [
+        "future methods rejected",
+        "both skew boundaries",
+        "one stale/missing input blocks"
+      ],
+      "residual_risks": [
+        "clock synchronization error",
+        "asymmetric feed latency",
+        "coverage loss"
+      ],
+      "runtime_change_required": true,
+      "status": "BLOCKED_UPSTREAM",
+      "technical_priority": "UPSTREAM_BLOCKER",
+      "upstream_dependencies": [
+        "B01",
+        "B03",
+        "B08",
+        "B09",
+        "B10"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "CLASSIFY_OBSERVED_OUTCOME",
+        "LEAVE_UNRESOLVED_AND_EXCLUDE_TRADE_BRANCH"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B12",
+      "component": "option_trades",
+      "current_readiness_state": "AMBIGUOUS/EMPTY_SUCCESS",
+      "decision_question": "Is trade acquisition AVAILABLE, DENIED, legitimately EMPTY, TRANSPORT_ERROR or SCHEMA_ERROR for this account?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B13",
+        "B14"
+      ],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "A false availability conclusion enables an unsupported dealer-flow branch.",
+      "missing_evidence": [
+        "authorized minimal non-empty schema observation or explicit denial/entitlement evidence"
+      ],
+      "name": "TRADE_ACCOUNT_ACQUISITION",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "docs/evidence/phase5c4b4c2_thetadata_account/evidence_summary.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "P4 returned EMPTY_SUCCESS",
+        "this proves neither denial nor availability"
+      ],
+      "prohibited_decision_classes": [
+        "INFER_DENIED",
+        "INFER_AVAILABLE",
+        "REPEAT_PROBE_WITHOUT_AUTHORIZATION"
+      ],
+      "promotion_preconditions": [
+        "future authorization",
+        "minimal evidence",
+        "human review"
+      ],
+      "promotion_target": "ACCOUNT_TRADE_ACQUISITION_CLASSIFIED",
+      "reprobe_required": true,
+      "required_future_implementation": [
+        "none until classification"
+      ],
+      "required_future_tests": [
+        "mutually exclusive classifications",
+        "retained raw/schema evidence"
+      ],
+      "residual_risks": [
+        "sample may be legitimately empty",
+        "account state may change"
+      ],
+      "runtime_change_required": false,
+      "status": "ACCOUNT_VERIFICATION_REQUIRED",
+      "technical_priority": "OPTIONAL_BRANCH_BLOCKER",
+      "upstream_dependencies": []
+    },
+    {
+      "admissible_decision_classes": [
+        "RECONSTRUCT_ONLY_PROVABLY_LINKED",
+        "EXCLUDE_UNRESOLVED_RECORDS",
+        "DECLARE_TRADE_FEATURES_NON_REPRODUCIBLE"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B13",
+      "component": "option_trades",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "Which records can be reconstructed without invented linkage, and must unlinked trade-dependent features remain non-reproducible?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_PARTIAL",
+      "external_data_required": true,
+      "human_decision_required": "UPSTREAM_FIRST",
+      "lookahead_risk": "Retrospective cancels/corrections or guessed links alter the tape known at T.",
+      "missing_evidence": [
+        "deterministic linkage semantics, if any",
+        "provider ordering/revision behavior"
+      ],
+      "name": "TRADE_CORRECTION_CANCEL_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "exchange timestamp and signed 32-bit wrapping non-global sequence exist",
+        "late/cancel/correction condition codes exist",
+        "cancel is not linked to its original"
+      ],
+      "prohibited_decision_classes": [
+        "INVENT_CANCEL_LINKAGE",
+        "GLOBAL_SEQUENCE_ASSUMPTION",
+        "LATEST_TAPE_IS_POINT_IN_TIME"
+      ],
+      "promotion_preconditions": [
+        "B12 AVAILABLE",
+        "semantics evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "CAUSAL_TRADE_CORRECTIONS_OR_EXCLUDED_BRANCH",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "wrap-aware point-in-time tape state or explicit non-reproducibility gate"
+      ],
+      "required_future_tests": [
+        "wrap/duplicate/late/cancel/correction",
+        "unlinked record fails closed",
+        "repeatability"
+      ],
+      "residual_risks": [
+        "unlinked records",
+        "sequence wrap collisions",
+        "trade-feature incompleteness"
+      ],
+      "runtime_change_required": true,
+      "status": "BLOCKED_UPSTREAM",
+      "technical_priority": "OPTIONAL_BRANCH_BLOCKER",
+      "upstream_dependencies": [
+        "B12"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "PROVIDER_SUPPLIED_AVAILABILITY_TIME",
+        "DETERMINISTIC_LATENCY_UPPER_BOUND",
+        "CONSERVATIVE_APPROVED_TRANSFORM",
+        "EXCLUDE_TRADE_BRANCH"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B14",
+      "component": "option_trades",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "Which evidence-backed rule establishes trade availability by replay time?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_INSUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "UPSTREAM_FIRST",
+      "lookahead_risk": "Trades arriving after T can affect reconstructed flow at T.",
+      "missing_evidence": [
+        "receipt/availability timestamps or defensible maximum latency evidence"
+      ],
+      "name": "TRADE_CAUSAL_AVAILABILITY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "historical tape is not evidence of received-by-T",
+        "receipt time and deterministic latency bound are absent"
+      ],
+      "prohibited_decision_classes": [
+        "EXCHANGE_TIME_EQUALS_AVAILABLE_TIME",
+        "AVERAGE_LATENCY",
+        "HISTORICAL_TAPE_PRESENCE"
+      ],
+      "promotion_preconditions": [
+        "B12 AVAILABLE",
+        "availability evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "CAUSAL_TRADE_TIME_OR_EXCLUDED_BRANCH",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "point-in-time availability gate"
+      ],
+      "required_future_tests": [
+        "late arrival and bound boundary",
+        "missing availability rejected"
+      ],
+      "residual_risks": [
+        "tail latency",
+        "excluded trades alter flow"
+      ],
+      "runtime_change_required": true,
+      "status": "BLOCKED_UPSTREAM",
+      "technical_priority": "OPTIONAL_BRANCH_BLOCKER",
+      "upstream_dependencies": [
+        "B12"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "LAST_CAUSALLY_PUBLISHED_RATE",
+        "FIXED_VERSIONED_RATE",
+        "ANOTHER_EXPLICITLY_APPROVED_CAUSAL_SOURCE_POLICY"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B15",
+      "component": "interest_rate",
+      "current_readiness_state": "BLOCKED_HUMAN_DECISION",
+      "decision_question": "Which versioned causal rate policy is approved for replay?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_SUFFICIENT",
+      "external_data_required": false,
+      "human_decision_required": "HUMAN_REQUIRED",
+      "lookahead_risk": "Using a D+1 publication on D is direct look-ahead.",
+      "missing_evidence": [],
+      "name": "RATE_CAUSAL_SELECTION_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/causal_greeks_inputs.py",
+        "docs/evidence/phase5c4b4c2_thetadata_account/evidence_summary.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "rate acquisition is VERIFIED_AVAILABLE",
+        "publication_time is explicit",
+        "SOFR for D published D+1 is not causal intraday D"
+      ],
+      "prohibited_decision_classes": [
+        "SAME_DATE_SOFR_BEFORE_PUBLICATION",
+        "NEAREST_FUTURE_PUBLICATION",
+        "UNVERSIONED_FIXED_RATE"
+      ],
+      "promotion_preconditions": [
+        "human selects one class",
+        "class-specific implementation",
+        "class-specific tests pass"
+      ],
+      "promotion_target": "CAUSAL_RATE",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "last-published: as-of publication selector",
+        "fixed: versioned constant/provenance",
+        "other: approved source-specific selector"
+      ],
+      "required_future_tests": [
+        "all: D+1 exclusion and provenance",
+        "last-published: weekends/holidays/missing publication",
+        "fixed: exact version/value",
+        "other: source-specific causal boundaries"
+      ],
+      "residual_risks": [
+        "last-published: stale benchmark risk",
+        "fixed: regime/model risk",
+        "other source: source-specific availability and revision risk"
+      ],
+      "runtime_change_required": true,
+      "status": "EVIDENCE_SUFFICIENT_DECISION_PENDING",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": []
+    },
+    {
+      "admissible_decision_classes": [
+        "ZERO_DIVIDEND",
+        "FIXED_VERSIONED_DIVIDEND_YIELD",
+        "HISTORICAL_CAUSAL_DIVIDEND_SOURCE",
+        "ANOTHER_EXPLICIT_MODEL_ASSUMPTION"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B16",
+      "component": "dividend_policy",
+      "current_readiness_state": "BLOCKED_HUMAN_DECISION",
+      "decision_question": "Which explicit, versioned dividend assumption/source is approved for real replay and which model risk is accepted?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_SUFFICIENT",
+      "external_data_required": false,
+      "human_decision_required": "HUMAN_REQUIRED",
+      "lookahead_risk": "Future-known dividends or revised yields alter IV and every Greek.",
+      "missing_evidence": [
+        "historical causal evidence if a historical source is proposed"
+      ],
+      "name": "DIVIDEND_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/local_greeks.py",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "LOCAL_SPX_BS_V1 requires dividend yield",
+        "ZERO is mathematical/test-only and not approved for real replay"
+      ],
+      "prohibited_decision_classes": [
+        "TEST_ZERO_AUTOMATICALLY_PROMOTED",
+        "UNVERSIONED_ASSUMPTION",
+        "FUTURE_DIVIDEND_INFORMATION"
+      ],
+      "promotion_preconditions": [
+        "human selects one class",
+        "external evidence when class requires it",
+        "implementation and tests pass"
+      ],
+      "promotion_target": "CAUSAL_DIVIDEND",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "policy-bound dividend input with version/provenance"
+      ],
+      "required_future_tests": [
+        "unapproved policy rejected",
+        "version/provenance",
+        "IV/Delta/Gamma/Theta/Rho sensitivity",
+        "GEX propagation"
+      ],
+      "residual_risks": [
+        "each option changes IV, Delta, Gamma, Theta and Rho",
+        "all changes propagate into downstream GEX",
+        "zero/fixed assumptions create model bias",
+        "historical source adds publication/revision risk"
+      ],
+      "runtime_change_required": true,
+      "status": "EVIDENCE_SUFFICIENT_DECISION_PENDING",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": []
+    },
+    {
+      "admissible_decision_classes": [
+        "VERSIONED_ORDINARY_DERIVATION_WITH_SPECIAL_FAIL_CLOSED",
+        "AUTHORITATIVE_HISTORICAL_METADATA_ONLY"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B17",
+      "component": "contract_metadata",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "Which ordinary-date fields may be conservatively derived, and which historical/special cases must require authoritative metadata or exclusion?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_PARTIAL",
+      "external_data_required": true,
+      "human_decision_required": "UPSTREAM_FIRST",
+      "lookahead_risk": "Later/current metadata can leak historical contract facts.",
+      "missing_evidence": [
+        "historical expiration/settlement and stable identity evidence",
+        "reference_time, available_time and provenance",
+        "holiday/special listing evidence"
+      ],
+      "name": "CONTRACT_METADATA_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "src/bot_spx/historical_provider_spec.py",
+        "docs/evidence/phase5c4b4c2_thetadata_account/evidence_summary.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "root, expiration, strike, right and symbol were observed",
+        "expiration date equals replay date under the conservative 0DTE rule",
+        "expiration time, settlement style, identity availability/reference time and full provenance remain unresolved"
+      ],
+      "prohibited_decision_classes": [
+        "CURRENT_METADATA_APPLIED_HISTORICALLY",
+        "ASSUME_SPECIAL_LISTING",
+        "INFER_SETTLEMENT_OR_EXPIRATION_TIME_SILENTLY"
+      ],
+      "promotion_preconditions": [
+        "B18 promoted",
+        "historical evidence",
+        "human approval",
+        "tests pass"
+      ],
+      "promotion_target": "CAUSAL_CONTRACT_METADATA",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "versioned metadata resolver after policy approval"
+      ],
+      "required_future_tests": [
+        "all required fields",
+        "ordinary/special/unknown",
+        "reference/available-time boundaries",
+        "identity determinism"
+      ],
+      "residual_risks": [
+        "inactive contract survivorship",
+        "special-listing exclusion",
+        "identity collision"
+      ],
+      "runtime_change_required": true,
+      "status": "BLOCKED_UPSTREAM",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": [
+        "B18"
+      ]
+    },
+    {
+      "admissible_decision_classes": [
+        "VERSIONED_HISTORICAL_CALENDAR_AND_LISTING_RULES",
+        "EXCLUDE_UNVERIFIED_SPECIAL_DATES"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B18",
+      "component": "session_calendar_expiration",
+      "current_readiness_state": "BLOCKED_UNRESOLVED",
+      "decision_question": "Which historical calendar source and rules define trading date, regular session, DST, early close, holiday, SPXW PM settlement, expiration time and special expiration?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [
+        "B17"
+      ],
+      "evidence_status": "PERSISTED_PARTIAL",
+      "external_data_required": true,
+      "human_decision_required": "EVIDENCE_FIRST",
+      "lookahead_risk": "Wrong historical session or expiry boundaries admit post-close/post-expiry facts.",
+      "missing_evidence": [
+        "versioned historical sessions/listings/expiration rules"
+      ],
+      "name": "SESSION_CALENDAR_EXPIRATION_POLICY",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "America/New_York and expiration date=replay date are necessary",
+        "holiday, early close, special expiration and historical listing changes remain unresolved"
+      ],
+      "prohibited_decision_classes": [
+        "CURRENT_CALENDAR_ASSUMED_HISTORICAL",
+        "FIXED_UTC_OFFSET",
+        "REGULAR_CLOSE_ON_EARLY_CLOSE",
+        "SPX_AND_SPXW_SETTLEMENT_CONFLATION"
+      ],
+      "promotion_preconditions": [
+        "historical source evidence",
+        "human approval",
+        "later implementation and tests"
+      ],
+      "promotion_target": "APPROVED_HISTORICAL_SESSION_CALENDAR",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "no calendar engine in 5B; later versioned resolver"
+      ],
+      "required_future_tests": [
+        "America/New_York DST",
+        "holidays/early closes",
+        "PM settlement and expiration",
+        "historical changes/specials fail closed"
+      ],
+      "residual_risks": [
+        "historical rule changes",
+        "special-date coverage loss"
+      ],
+      "runtime_change_required": true,
+      "status": "POLICY_DEFINITION_REQUIRED",
+      "technical_priority": "FOUNDATIONAL_BLOCKER",
+      "upstream_dependencies": []
+    },
+    {
+      "admissible_decision_classes": [
+        "EXPLICIT_VERSIONED_DEPTH_REQUIREMENT",
+        "EXPLICIT_VERSIONED_SAMPLED_PERIOD_REQUIREMENT"
+      ],
+      "automatic_promotion_allowed": false,
+      "blocker_id": "B19",
+      "component": "historical_depth",
+      "current_readiness_state": "HUMAN_DECISION_PENDING",
+      "decision_question": "What minimum sessions, date span, market regimes, per-component availability, and continuous-versus-sampled coverage define sufficient depth?",
+      "does_not_unlock": [
+        "NO_COMPONENT_BY_ITSELF",
+        "UNRELATED_BRANCHES",
+        "LOADER_BACKTEST_MAPPING_AND_CUTOVER"
+      ],
+      "downstream_dependents": [],
+      "evidence_status": "PERSISTED_SUFFICIENT",
+      "external_data_required": true,
+      "human_decision_required": "HUMAN_REQUIRED",
+      "lookahead_risk": "Selecting dates after observing results or silently accepting gaps biases evaluation.",
+      "missing_evidence": [
+        "account component coverage after the required depth is defined"
+      ],
+      "name": "HISTORICAL_DEPTH_REQUIREMENT",
+      "notes": [],
+      "persisted_evidence_refs": [
+        "docs/evidence/phase5c4b4c2_thetadata_account/evidence_summary.json",
+        "docs/evidence/phase5c4b5a_replay_readiness.json"
+      ],
+      "persisted_evidence_summary": [
+        "all account-verified depth is SINGLE_DATE_ONLY",
+        "no minimum backtest length decision is persisted"
+      ],
+      "prohibited_decision_classes": [
+        "INVENTED_SESSION_COUNT",
+        "SINGLE_DATE_PROMOTION",
+        "PROVIDER_DESCRIBED_EQUALS_ACCOUNT_VERIFIED"
+      ],
+      "promotion_preconditions": [
+        "human depth decision",
+        "later separately authorized evidence",
+        "manifest validation"
+      ],
+      "promotion_target": "SUFFICIENT_ACCOUNT_VERIFIED_DEPTH",
+      "reprobe_required": false,
+      "required_future_implementation": [
+        "offline depth manifest only after approval and authorization"
+      ],
+      "required_future_tests": [
+        "minimum/date boundaries",
+        "regime declaration",
+        "component holes",
+        "continuous/sample conformance"
+      ],
+      "residual_risks": [
+        "regime underrepresentation",
+        "component coverage mismatch",
+        "sampling bias"
+      ],
+      "runtime_change_required": false,
+      "status": "EVIDENCE_SUFFICIENT_DECISION_PENDING",
+      "technical_priority": "DOWNSTREAM_BLOCKER",
+      "upstream_dependencies": []
+    }
+  ],
+  "evidence_requests": [
+    {
+      "credential_required": true,
+      "evidence_id": "E01",
+      "expected_outcomes": [
+        "availability timestamp",
+        "deterministic bound",
+        "semantics proved",
+        "semantics absent"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "one already-known contract",
+        "one date",
+        "minimum records covering only required cases",
+        "no pagination"
+      ],
+      "question_answered": "Quote availability, correction/condition and cadence semantics",
+      "raw_payload_retention": "retain minimum raw response plus request context and hashes",
+      "related_blockers": [
+        "B01",
+        "B02",
+        "B03"
+      ],
+      "source_class": "PERSISTED_PROVIDER_ARTIFACT_OR_SEPARATELY_AUTHORIZED_ACCOUNT_EVIDENCE",
+      "stop_conditions": [
+        "question answered",
+        "scope expands",
+        "unexpected row volume",
+        "pagination needed"
+      ]
+    },
+    {
+      "credential_required": true,
+      "evidence_id": "E02",
+      "expected_outcomes": [
+        "semantics proved",
+        "partial",
+        "not exposed"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "minimum messages/contracts/dates needed to distinguish cases",
+        "no bulk",
+        "no pagination"
+      ],
+      "question_answered": "OI availability, replacement and missingness coverage semantics",
+      "raw_payload_retention": "retain minimum raw messages and provenance",
+      "related_blockers": [
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "source_class": "PERSISTED_PROVIDER_ARTIFACT_OR_SEPARATELY_AUTHORIZED_ACCOUNT_EVIDENCE",
+      "stop_conditions": [
+        "question answered",
+        "scope anomaly",
+        "pagination needed"
+      ]
+    },
+    {
+      "credential_required": true,
+      "evidence_id": "E03",
+      "expected_outcomes": [
+        "AVAILABLE",
+        "DENIED",
+        "TRANSPORT_ERROR",
+        "EMPTY",
+        "SCHEMA_ERROR"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "one authorized request",
+        "one date",
+        "minimum rows",
+        "no retry unless separately authorized"
+      ],
+      "question_answered": "Account-specific SPX acquisition classification",
+      "raw_payload_retention": "retain exact minimal response/error and context",
+      "related_blockers": [
+        "B07"
+      ],
+      "source_class": "ACCOUNT_OBSERVATION",
+      "stop_conditions": [
+        "first classifiable outcome",
+        "unexpected volume",
+        "credential/access issue"
+      ]
+    },
+    {
+      "credential_required": true,
+      "evidence_id": "E04",
+      "expected_outcomes": [
+        "facts proved",
+        "partial",
+        "not exposed"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "only after B07 AVAILABLE",
+        "minimum date/window",
+        "minimum rows",
+        "no pagination"
+      ],
+      "question_answered": "SPX availability, unchanged/gap/cadence and skew facts",
+      "raw_payload_retention": "retain minimum raw observations and timing provenance",
+      "related_blockers": [
+        "B08",
+        "B09",
+        "B10",
+        "B11"
+      ],
+      "source_class": "ACCOUNT_AND_PROVIDER_SEMANTICS",
+      "stop_conditions": [
+        "B07 not AVAILABLE",
+        "question answered",
+        "scope anomaly",
+        "pagination needed"
+      ]
+    },
+    {
+      "credential_required": true,
+      "evidence_id": "E05",
+      "expected_outcomes": [
+        "AVAILABLE",
+        "DENIED",
+        "LEGITIMATELY_EMPTY",
+        "TRANSPORT_ERROR",
+        "SCHEMA_ERROR"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "one authorized minimally likely non-empty contract/window",
+        "minimum rows",
+        "no retry/pagination"
+      ],
+      "question_answered": "Trade account acquisition classification",
+      "raw_payload_retention": "retain exact minimal response/error and context",
+      "related_blockers": [
+        "B12"
+      ],
+      "source_class": "ACCOUNT_OBSERVATION",
+      "stop_conditions": [
+        "first classifiable outcome",
+        "unexpected volume",
+        "pagination needed"
+      ]
+    },
+    {
+      "credential_required": true,
+      "evidence_id": "E06",
+      "expected_outcomes": [
+        "causal semantics proved",
+        "unlinked remains",
+        "availability absent"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "only after B12 AVAILABLE",
+        "minimum records covering target conditions",
+        "no bulk/pagination"
+      ],
+      "question_answered": "Trade linkage/ordering and availability semantics",
+      "raw_payload_retention": "retain minimum raw records and provenance",
+      "related_blockers": [
+        "B13",
+        "B14"
+      ],
+      "source_class": "PERSISTED_PROVIDER_ARTIFACT_OR_SEPARATELY_AUTHORIZED_ACCOUNT_EVIDENCE",
+      "stop_conditions": [
+        "B12 not AVAILABLE",
+        "question answered",
+        "scope anomaly"
+      ]
+    },
+    {
+      "credential_required": false,
+      "evidence_id": "E07",
+      "expected_outcomes": [
+        "rules evidenced",
+        "special cases excluded",
+        "insufficient"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "ordinary plus minimum exceptional dates needed by approved scope",
+        "no broad crawl"
+      ],
+      "question_answered": "Historical contract/session/settlement/listing facts",
+      "raw_payload_retention": "retain cited/versioned extracts and provenance only",
+      "related_blockers": [
+        "B17",
+        "B18"
+      ],
+      "source_class": "VERSIONED_HISTORICAL_REFERENCE_EVIDENCE",
+      "stop_conditions": [
+        "approved scope covered",
+        "bulk needed",
+        "unversioned source"
+      ]
+    },
+    {
+      "credential_required": true,
+      "evidence_id": "E08",
+      "expected_outcomes": [
+        "sufficient",
+        "insufficient",
+        "component-specific gap"
+      ],
+      "external_call_required": true,
+      "human_authorization_required": true,
+      "minimum_scope": [
+        "only dates/components required by Q9",
+        "start with boundary samples",
+        "no bulk/pagination"
+      ],
+      "question_answered": "Account coverage against an already-approved depth requirement",
+      "raw_payload_retention": "retain coverage manifest and minimum boundary evidence",
+      "related_blockers": [
+        "B19"
+      ],
+      "source_class": "ACCOUNT_OBSERVATION",
+      "stop_conditions": [
+        "Q9 pending",
+        "gap found",
+        "unexpected volume",
+        "pagination needed"
+      ]
+    }
+  ],
+  "frozen_inputs": {
+    "OI": "BLOCKED_UNRESOLVED",
+    "P2": "ACQUISITION_SCOPE_ANOMALY",
+    "P2_row_count": 17326,
+    "SPX": "BLOCKED_UNRESOLVED",
+    "account_tier": "NOT_PERSISTED/UNRESOLVED",
+    "available_capabilities": 7,
+    "current_blockers": 19,
+    "current_session_status": "BLOCKED",
+    "cutover": "NO",
+    "historical_depth": "SINGLE_DATE_ONLY",
+    "historical_spxw_0dte_universe": "READY_WITH_CONSERVATIVE_RULE/LOW",
+    "local_greeks_iv": "NEEDS_RECONSTRUCTION",
+    "mapping_promotions": 0,
+    "provider_greeks_iv": "EXCLUDED",
+    "quotes": "BLOCKED_UNRESOLVED",
+    "spx_acquisition": "ERROR/TRANSPORT_ERROR/UNRESOLVED",
+    "trade_acquisition": "AMBIGUOUS/EMPTY_SUCCESS",
+    "trades": "BLOCKED_UNRESOLVED"
+  },
+  "local_greeks_dependency_chain": {
+    "currently_eligible_inputs": [],
+    "eligible_local_greeks_requires": [
+      "eligible local IV",
+      "LOCAL_SPX_BS_V1"
+    ],
+    "eligible_local_iv_requires": [
+      "causal quote",
+      "causal SPX",
+      "causal rate",
+      "approved dividend",
+      "causal metadata",
+      "approved alignment",
+      "approved staleness"
+    ],
+    "local_greeks_iv": "NEEDS_RECONSTRUCTION",
+    "provider_greeks_iv": "EXCLUDED"
+  },
+  "minimization_principle": {
+    "bulk": false,
+    "crawler": false,
+    "minimum_calls": true,
+    "minimum_dates": true,
+    "minimum_retention": true,
+    "minimum_rows": true,
+    "pagination": "SEPARATE_AUTHORIZATION_REQUIRED",
+    "reason": "P2 ACQUISITION_SCOPE_ANOMALY returned 17326 rows"
+  },
+  "next_actions": [
+    {
+      "action_class": "CONTROLLED_EVIDENCE_ACQUISITION",
+      "action_id": "A01",
+      "description": "Execute E01 only after future authorization.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B01",
+        "B02",
+        "B03"
+      ]
+    },
+    {
+      "action_class": "CONTROLLED_EVIDENCE_ACQUISITION",
+      "action_id": "A02",
+      "description": "Execute E02 only after future authorization.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B04",
+        "B05",
+        "B06"
+      ]
+    },
+    {
+      "action_class": "CONTROLLED_EVIDENCE_ACQUISITION",
+      "action_id": "A03",
+      "description": "Execute E03 only after future authorization.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B07"
+      ]
+    },
+    {
+      "action_class": "CONTROLLED_EVIDENCE_ACQUISITION",
+      "action_id": "A04",
+      "description": "Execute E05 only after future authorization.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B12"
+      ]
+    },
+    {
+      "action_class": "HUMAN_DECISION",
+      "action_id": "A05",
+      "description": "Resolve Q6 from persisted evidence.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B15"
+      ]
+    },
+    {
+      "action_class": "HUMAN_DECISION",
+      "action_id": "A06",
+      "description": "Resolve Q7; acquire evidence later only if the chosen class needs it.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B16"
+      ]
+    },
+    {
+      "action_class": "HUMAN_DECISION",
+      "action_id": "A07",
+      "description": "Define Q9 before any depth acquisition.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B19"
+      ]
+    },
+    {
+      "action_class": "CONTROLLED_EVIDENCE_ACQUISITION",
+      "action_id": "A08",
+      "description": "Execute E07 only after future authorization.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [],
+      "related_blockers": [
+        "B18"
+      ]
+    },
+    {
+      "action_class": "BLOCKED_UPSTREAM",
+      "action_id": "A09",
+      "description": "Acquire/decide SPX temporal facts only if B07 becomes AVAILABLE.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [
+        "A03"
+      ],
+      "related_blockers": [
+        "B08",
+        "B09",
+        "B10",
+        "B11"
+      ]
+    },
+    {
+      "action_class": "BLOCKED_UPSTREAM",
+      "action_id": "A10",
+      "description": "Acquire/decide trade tape facts only if B12 becomes AVAILABLE.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [
+        "A04"
+      ],
+      "related_blockers": [
+        "B13",
+        "B14"
+      ]
+    },
+    {
+      "action_class": "OFFLINE_IMPLEMENTATION",
+      "action_id": "A11",
+      "description": "Implement only policies later approved and only after their evidence gates.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10"
+      ],
+      "related_blockers": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B09",
+        "B10",
+        "B11",
+        "B12",
+        "B13",
+        "B14",
+        "B15",
+        "B16",
+        "B17",
+        "B18",
+        "B19"
+      ]
+    },
+    {
+      "action_class": "VALIDATION",
+      "action_id": "A12",
+      "description": "Run required blocker-specific fail-closed tests before any promotion.",
+      "execute_in_this_phase": false,
+      "prerequisite_actions": [
+        "A11"
+      ],
+      "related_blockers": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B09",
+        "B10",
+        "B11",
+        "B12",
+        "B13",
+        "B14",
+        "B15",
+        "B16",
+        "B17",
+        "B18",
+        "B19"
+      ]
+    }
+  ],
+  "phase": "5C-4B.5B",
+  "phase_actions_executed": [],
+  "policies_approved": [],
+  "resolution_classification": {
+    "only_after_another_blocker": [
+      "B02",
+      "B03",
+      "B05",
+      "B06",
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B13",
+      "B14",
+      "B17"
+    ],
+    "only_after_external_evidence": [
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B12",
+      "B13",
+      "B14",
+      "B17",
+      "B18",
+      "B19"
+    ],
+    "with_human_decision": [
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B12",
+      "B13",
+      "B14",
+      "B15",
+      "B16",
+      "B17",
+      "B18",
+      "B19"
+    ],
+    "without_external_evidence": [
+      "B15",
+      "B16"
+    ]
+  },
+  "resolution_edges": [
+    {
+      "dependent": "B02",
+      "prerequisite": "B01"
+    },
+    {
+      "dependent": "B03",
+      "prerequisite": "B01"
+    },
+    {
+      "dependent": "B11",
+      "prerequisite": "B01"
+    },
+    {
+      "dependent": "B11",
+      "prerequisite": "B03"
+    },
+    {
+      "dependent": "B05",
+      "prerequisite": "B04"
+    },
+    {
+      "dependent": "B06",
+      "prerequisite": "B04"
+    },
+    {
+      "dependent": "B06",
+      "prerequisite": "B05"
+    },
+    {
+      "dependent": "B08",
+      "prerequisite": "B07"
+    },
+    {
+      "dependent": "B09",
+      "prerequisite": "B07"
+    },
+    {
+      "dependent": "B10",
+      "prerequisite": "B07"
+    },
+    {
+      "dependent": "B09",
+      "prerequisite": "B08"
+    },
+    {
+      "dependent": "B10",
+      "prerequisite": "B08"
+    },
+    {
+      "dependent": "B11",
+      "prerequisite": "B08"
+    },
+    {
+      "dependent": "B11",
+      "prerequisite": "B09"
+    },
+    {
+      "dependent": "B11",
+      "prerequisite": "B10"
+    },
+    {
+      "dependent": "B13",
+      "prerequisite": "B12"
+    },
+    {
+      "dependent": "B14",
+      "prerequisite": "B12"
+    },
+    {
+      "dependent": "B17",
+      "prerequisite": "B18"
+    }
+  ],
+  "resolution_topological_order": [
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "B05",
+    "B06",
+    "B07",
+    "B08",
+    "B09",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B14",
+    "B15",
+    "B16",
+    "B18",
+    "B17",
+    "B19"
+  ],
+  "schema_version": "1.0",
+  "source_phase": "5C-4B.5A",
+  "trade_feature_derivation": {
+    "operational_degraded_mode_created": false,
+    "possible_no_dealer_flow_branch_not_approved": [
+      "Gamma Balance",
+      "Gamma Regime",
+      "Mean Reversion signal",
+      "Breakout/Breakdown signal",
+      "Risk gate",
+      "Entry permission"
+    ],
+    "semantic_changes_if_trade_branch_omitted": [
+      "no dealer-flow estimate",
+      "no aggressor classification",
+      "no dynamic/dealer GEX contribution",
+      "signals become static-OI/level semantics rather than dealer-flow-aware semantics"
+    ],
+    "trades_required": [
+      "Dealer flow",
+      "aggressor classification",
+      "Dynamic GEX",
+      "Dealer Dynamic GEX"
+    ],
+    "without_trades": [
+      "SPX spot",
+      "Call Wall",
+      "Put Wall",
+      "Gamma Flip / Zero Gamma",
+      "Static OI/GEX",
+      "quote-based local IV",
+      "local Greeks"
+    ]
+  }
+}
