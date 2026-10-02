@@ -18,11 +18,11 @@ NOW = lambda: datetime(2026, 1, 16, tzinfo=timezone.utc)
 
 
 def contract_payload():
-    return {"data": [{"root": "SPXW", "expiration": "20260115", "strike": 6000000, "right": "C"}]}
+    return {"data": [{"symbol": "SPXW", "expiration": "20260115", "strike": 6000000, "right": "C"}]}
 
 
-def available_transport(path, params, key):
-    if path.endswith("contracts"): return 200, contract_payload()
+def available_transport(operation, params):
+    if operation == "option_list_contracts": return 200, contract_payload()
     return 200, {"data": [{"price": 1, "size": 1, "rate": 1, "gamma": 1, "iv": 1, "delta": 1, "bid": 1, "ask": 1, "open_interest": 1, "subscription": "x"}]}
 
 
@@ -58,10 +58,50 @@ def test_dry_run_reads_no_credential_and_makes_no_calls():
 
 def test_plan_is_get_only_allowlisted_and_has_no_pagination():
     source = PATH.read_text()
-    assert 'method="GET"' in source
-    assert not any(word in [p.path.lower() for p in probe.PROBES] for word in ("order", "bulk"))
+    assert "OfficialThetaTransport" in source and "ThetaClient" in source
+    assert "BASE_URL" not in source and "urllib.request" not in source
+    assert not any(word in [p.operation.lower() for p in probe.PROBES] for word in ("order", "bulk"))
     assert "next_page" not in source and "page_size" not in source
     assert probe.MUTATION_METHODS == {"POST", "PUT", "PATCH", "DELETE"}
+
+
+def test_official_client_discovers_key_and_adapter_never_accepts_it():
+    created = []
+    class Client:
+        options_subscription = "option-plan"
+        index_subscription = "index-plan"
+    def factory(**kwargs):
+        created.append(kwargs)
+        return Client()
+    transport = probe.OfficialThetaTransport(client_factory=factory)
+    status, payload = transport("account_metadata", {})
+    assert created == [{"dataframe_type": "polars"}]
+    assert status == 200 and set(payload) == {"options_subscription", "index_subscription"}
+    assert "api_key" not in created[0]
+
+
+def test_official_operation_allowlist_rejects_arbitrary_calls():
+    transport = probe.OfficialThetaTransport(client_factory=lambda **kwargs: object())
+    with pytest.raises(RuntimeError, match="ENDPOINT_NOT_ALLOWLISTED"):
+        transport("arbitrary_operation", {})
+
+
+def test_official_client_initialization_failure_is_sanitized_and_stops_calls():
+    secret = "SYNTHETIC-CLIENT-SECRET"
+    class AuthenticationError(Exception):
+        pass
+    result = probe.run(
+        DAY,
+        dry_run=False,
+        transport_factory=lambda: (_ for _ in ()).throw(AuthenticationError(secret)),
+        environ={"THETADATA_API_KEY": "present-but-never-forwarded"},
+        now=NOW,
+    )
+    encoded = json.dumps(result)
+    assert secret not in encoded and "present-but-never-forwarded" not in encoded
+    assert result["probe_results"][0]["outcome"] == "AMBIGUOUS"
+    assert all(item["outcome"] == "NOT_TESTED" for item in result["probe_results"][1:])
+    assert result["safety_ledger"]["provider_data_calls"] == 0
 
 
 def test_contract_selection_is_deterministic_and_observed():
@@ -75,22 +115,22 @@ def test_contract_selection_is_deterministic_and_observed():
 
 def test_p2_failure_blocks_only_contract_dependents_not_index():
     calls = []
-    def transport(path, params, key):
-        calls.append(path)
-        return (200, {"data": []}) if path.endswith("contracts") else available_transport(path, params, key)
+    def transport(operation, params):
+        calls.append(operation)
+        return (200, {"data": []}) if operation == "option_list_contracts" else available_transport(operation, params)
     result = run(transport)
     by_id = {x["probe_id"]: x for x in result["probe_results"]}
     assert all(by_id[f"P{i}"]["outcome"] == "NOT_TESTED" for i in range(3, 8))
     assert by_id["P8"]["outcome"] == "VERIFIED_AVAILABLE"
-    assert not any(f"/option/history/" in p for p in calls)
+    assert not any(p.startswith("option_history_") for p in calls)
 
 
 def test_options_do_not_infer_indices_and_p6_does_not_infer_gamma():
-    def transport(path, params, key):
-        if path.endswith("contracts"): return 200, contract_payload()
-        if path == "/index/history/price": return 200, {"data": []}
-        if path == "/option/history/eod": return 402, {}
-        return available_transport(path, params, key)
+    def transport(operation, params):
+        if operation == "option_list_contracts": return 200, contract_payload()
+        if operation == "index_history_price": return 200, {"data": []}
+        if operation == "option_history_greeks_eod": return 402, {}
+        return available_transport(operation, params)
     by_id = {x["probe_id"]: x for x in run(transport)["probe_results"]}
     assert by_id["P6"]["outcome"] == "VERIFIED_AVAILABLE"
     assert by_id["P7"]["outcome"] == "VERIFIED_DENIED"
@@ -102,20 +142,20 @@ def test_options_do_not_infer_indices_and_p6_does_not_infer_gamma():
     (lambda: (401, {}), "AMBIGUOUS", "AUTH_OR_ACCESS_ERROR"),
 ])
 def test_empty_and_auth_are_not_denied(behavior, expected, status):
-    def transport(path, params, key):
-        if path.endswith("contracts"): return 200, contract_payload()
-        if path.endswith("quote"): return behavior()
-        return available_transport(path, params, key)
+    def transport(operation, params):
+        if operation == "option_list_contracts": return 200, contract_payload()
+        if operation == "option_history_quote": return behavior()
+        return available_transport(operation, params)
     item = run(transport)["probe_results"][2]
     assert (item["outcome"], item["status_class"]) == (expected, status)
 
 
 def test_timeout_is_not_denied_and_secret_is_redacted():
     secret = "SYNTHETIC-DO-NOT-LEAK"
-    def transport(path, params, key):
-        if path.endswith("contracts"): return 200, contract_payload()
-        if path.endswith("quote"): raise TimeoutError(secret)
-        return available_transport(path, params, key)
+    def transport(operation, params):
+        if operation == "option_list_contracts": return 200, contract_payload()
+        if operation == "option_history_quote": raise TimeoutError(secret)
+        return available_transport(operation, params)
     encoded = json.dumps(probe.run(DAY, dry_run=False, transport=transport, environ={"THETADATA_API_KEY": secret}, now=NOW))
     assert secret not in encoded
     assert '"outcome": "AMBIGUOUS"' in encoded and '"status_class": "TIMEOUT"' in encoded
@@ -123,10 +163,10 @@ def test_timeout_is_not_denied_and_secret_is_redacted():
 
 @pytest.mark.parametrize("payload", ["malformed", {"data": [{"unexpected": 123}]}, {"data": [{"bid": 1}]}])
 def test_malformed_or_partial_schema_is_not_verified(payload):
-    def transport(path, params, key):
-        if path.endswith("contracts"): return 200, contract_payload()
-        if path.endswith("quote"): return 200, payload
-        return available_transport(path, params, key)
+    def transport(operation, params):
+        if operation == "option_list_contracts": return 200, contract_payload()
+        if operation == "option_history_quote": return 200, payload
+        return available_transport(operation, params)
     item = run(transport)["probe_results"][2]
     assert item["outcome"] in {"AMBIGUOUS", "ERROR"}
 
