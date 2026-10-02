@@ -1,0 +1,334 @@
+{
+  "account_metadata_interpretation": {
+    "ACCOUNT_METADATA_ACCESS": "VERIFIED_AVAILABLE",
+    "ACCOUNT_TIER_INTERPRETATION": "UNRESOLVED",
+    "ACCOUNT_TIER_VALUE": "NOT_PERSISTED",
+    "fields_observed": [
+      "index_subscription",
+      "options_subscription"
+    ],
+    "options_implies_indices": false
+  },
+  "acquisition_capabilities": {
+    "ACCOUNT_METADATA_ACCESS": "VERIFIED_AVAILABLE",
+    "EOD_GAMMA_ACQUISITION": "VERIFIED_AVAILABLE",
+    "INTEREST_RATE_HISTORY_ACQUISITION": "VERIFIED_AVAILABLE",
+    "OPEN_INTEREST_ACQUISITION": "VERIFIED_AVAILABLE",
+    "OPTION_QUOTE_ACQUISITION": "VERIFIED_AVAILABLE",
+    "PROVIDER_IV_FIRST_ORDER_GREEKS_ACQUISITION": "VERIFIED_AVAILABLE",
+    "SPX_SPXW_CONTRACT_LIST_ACCESS": "VERIFIED_AVAILABLE"
+  },
+  "causal_mapping_snapshot": {
+    "OI": "BLOCKED_UNRESOLVED",
+    "SPX": "BLOCKED_UNRESOLVED",
+    "historical_SPXW_0DTE_universe": {
+      "confidence": "LOW",
+      "status": "READY_WITH_CONSERVATIVE_RULE"
+    },
+    "local_greeks_iv": "NEEDS_RECONSTRUCTION",
+    "provider_greeks_iv": "EXCLUDED",
+    "quotes": "BLOCKED_UNRESOLVED",
+    "trades": "BLOCKED_UNRESOLVED"
+  },
+  "cutover": "NO",
+  "historical_depth_status": {
+    "ACCOUNT_METADATA": "SINGLE_DATE_ONLY",
+    "EOD_GAMMA": "SINGLE_DATE_ONLY",
+    "INTEREST_RATE_HISTORY": "SINGLE_DATE_ONLY",
+    "IV_FIRST_ORDER_GREEKS": "SINGLE_DATE_ONLY",
+    "OPEN_INTEREST": "SINGLE_DATE_ONLY",
+    "OPTION_QUOTE": "SINGLE_DATE_ONLY",
+    "OPTION_TRADE": "SINGLE_DATE_ONLY",
+    "SPX_INDEX_HISTORY": "SINGLE_DATE_ONLY",
+    "SPX_SPXW_CONTRACT_LIST": "SINGLE_DATE_ONLY"
+  },
+  "interpretation_guards": {
+    "EOD_gamma_implies_intraday_gamma": false,
+    "P6_and_P7_independent": true,
+    "acquisition_implies_causal_replay_eligibility": false,
+    "retrospective_rate_implies_intraday_availability": false,
+    "single_date_implies_general_historical_depth": false
+  },
+  "mapping_promotions": 0,
+  "outcome_counts": {
+    "AMBIGUOUS": 1,
+    "ERROR": 1,
+    "NOT_TESTED": 0,
+    "VERIFIED_AVAILABLE": 7,
+    "VERIFIED_DENIED": 0
+  },
+  "per_probe_summary": [
+    {
+      "capability": "ACCOUNT_METADATA",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "VERIFIED_AVAILABLE",
+      "fields_observed": [
+        "index_subscription",
+        "options_subscription"
+      ],
+      "outcome": "VERIFIED_AVAILABLE",
+      "probe_id": "P1",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 1,
+      "schema_verified": true,
+      "status_class": "SUCCESS"
+    },
+    {
+      "capability": "SPX_SPXW_CONTRACT_LIST",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "VERIFIED_AVAILABLE",
+      "fields_observed": [
+        "expiration",
+        "right",
+        "strike",
+        "symbol"
+      ],
+      "outcome": "VERIFIED_AVAILABLE",
+      "probe_id": "P2",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 17326,
+      "schema_verified": true,
+      "status_class": "SUCCESS"
+    },
+    {
+      "capability": "OPTION_QUOTE",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "VERIFIED_AVAILABLE",
+      "fields_observed": [
+        "ask",
+        "ask_condition",
+        "ask_exchange",
+        "ask_size",
+        "bid",
+        "bid_condition",
+        "bid_exchange",
+        "bid_size",
+        "expiration",
+        "right",
+        "strike",
+        "symbol",
+        "timestamp"
+      ],
+      "outcome": "VERIFIED_AVAILABLE",
+      "probe_id": "P3",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 2,
+      "schema_verified": true,
+      "status_class": "SUCCESS"
+    },
+    {
+      "capability": "OPTION_TRADE",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "AMBIGUOUS",
+      "fields_observed": [],
+      "outcome": "AMBIGUOUS",
+      "probe_id": "P4",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 0,
+      "schema_verified": false,
+      "status_class": "EMPTY_SUCCESS"
+    },
+    {
+      "capability": "OPEN_INTEREST",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "VERIFIED_AVAILABLE",
+      "fields_observed": [
+        "expiration",
+        "open_interest",
+        "right",
+        "strike",
+        "symbol",
+        "timestamp"
+      ],
+      "outcome": "VERIFIED_AVAILABLE",
+      "probe_id": "P5",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 1,
+      "schema_verified": true,
+      "status_class": "SUCCESS"
+    },
+    {
+      "capability": "IV_FIRST_ORDER_GREEKS",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "VERIFIED_AVAILABLE",
+      "fields_observed": [
+        "ask",
+        "bid",
+        "delta",
+        "epsilon",
+        "expiration",
+        "implied_vol",
+        "iv_error",
+        "lambda",
+        "rho",
+        "right",
+        "strike",
+        "symbol",
+        "theta",
+        "timestamp",
+        "underlying_price",
+        "underlying_timestamp",
+        "vega"
+      ],
+      "outcome": "VERIFIED_AVAILABLE",
+      "probe_id": "P6",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 2,
+      "schema_verified": true,
+      "status_class": "SUCCESS"
+    },
+    {
+      "capability": "EOD_GAMMA",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "VERIFIED_AVAILABLE",
+      "fields_observed": [
+        "ask",
+        "ask_condition",
+        "ask_exchange",
+        "ask_size",
+        "bid",
+        "bid_condition",
+        "bid_exchange",
+        "bid_size",
+        "charm",
+        "close",
+        "color",
+        "count",
+        "d1",
+        "d2",
+        "delta",
+        "dual_delta",
+        "dual_gamma",
+        "epsilon",
+        "expiration",
+        "gamma",
+        "high",
+        "implied_vol",
+        "iv_error",
+        "lambda",
+        "low",
+        "open",
+        "rho",
+        "right",
+        "speed",
+        "strike",
+        "symbol",
+        "theta",
+        "timestamp",
+        "ultima",
+        "underlying_price",
+        "underlying_timestamp",
+        "vanna",
+        "vega",
+        "vera",
+        "veta",
+        "volume",
+        "vomma",
+        "zomma"
+      ],
+      "outcome": "VERIFIED_AVAILABLE",
+      "probe_id": "P7",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 1,
+      "schema_verified": true,
+      "status_class": "SUCCESS"
+    },
+    {
+      "capability": "SPX_INDEX_HISTORY",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "ERROR",
+      "fields_observed": [],
+      "outcome": "ERROR",
+      "probe_id": "P8",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 0,
+      "schema_verified": false,
+      "status_class": "TRANSPORT_ERROR"
+    },
+    {
+      "capability": "INTEREST_RATE_HISTORY",
+      "date_tested": "2026-01-15",
+      "entitlement_interpretation": "VERIFIED_AVAILABLE",
+      "fields_observed": [
+        "created",
+        "rate"
+      ],
+      "outcome": "VERIFIED_AVAILABLE",
+      "probe_id": "P9",
+      "resolution_observed": "MINIMUM_SINGLE_DATE",
+      "row_count": 1,
+      "schema_verified": true,
+      "status_class": "SUCCESS"
+    }
+  ],
+  "probe_count": 9,
+  "requested_date": "2026-01-15",
+  "safety_ledger": {
+    "DELETE": 0,
+    "DigitalOcean": 0,
+    "PATCH": 0,
+    "POST": 0,
+    "PUT": 0,
+    "TradeStation": 0,
+    "authenticated_calls": 9,
+    "backtests": 0,
+    "credential_reads": 1,
+    "cutover": "NO",
+    "mapping_promotions": 0,
+    "orders": 0,
+    "probes_ambiguous": 1,
+    "probes_attempted": 9,
+    "probes_available": 7,
+    "probes_denied": 0,
+    "probes_error": 1,
+    "probes_not_tested": 0,
+    "provider_data_calls": 8,
+    "raw_payloads_persisted": 0,
+    "rows_observed": 17334,
+    "runtime_modifications": 0,
+    "technical_retries": 0
+  },
+  "schema_version": "1.0",
+  "scope_anomalies": [
+    {
+      "automatic_repeat_permitted": false,
+      "classification": "ACQUISITION_SCOPE_ANOMALY",
+      "future_control": "Design a stricter contract-query limit before any separately authorized real execution.",
+      "market_or_contract_values_persisted": false,
+      "not_classified_as": [
+        "SECRET_LEAK",
+        "RAW_PAYLOAD_PERSISTENCE",
+        "CAUSAL_MAPPING_PROMOTION",
+        "BACKTEST",
+        "RUNTIME_INTEGRATION"
+      ],
+      "probe_id": "P2",
+      "raw_payloads_persisted": 0,
+      "reason": "The intended minimal contract verification observed 17,326 rows.",
+      "rows_observed_transiently": 17326
+    }
+  ],
+  "source_file": "probe_result_v2.json",
+  "source_sha256": "af908e2213baa028ac7a501483221a00cb50305aef59ecce044c9bd466dc00a0",
+  "unresolved_capabilities": {
+    "ACCOUNT_TIER_INTERPRETATION": "UNRESOLVED",
+    "OPTION_TRADE_ENTITLEMENT": {
+      "possible_causes": [
+        "CONTRACT_WITHOUT_TRADES",
+        "SELECTED_WINDOW",
+        "METHOD_BEHAVIOR",
+        "ENTITLEMENT",
+        "OTHER_UNDEMONSTRATED_CAUSE"
+      ],
+      "status": "AMBIGUOUS"
+    },
+    "SPX_INDEX_HISTORY_ENTITLEMENT": {
+      "evidence_outcome": "ERROR",
+      "status": "UNRESOLVED",
+      "status_class": "TRANSPORT_ERROR"
+    },
+    "causal_rate_availability": "NOT_INFERRED",
+    "intraday_gamma_entitlement": "NOT_INFERRED"
+  },
+  "verification_time": "2026-10-02T17:17:11.074721+00:00"
+}
